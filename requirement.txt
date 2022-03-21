@@ -1,6 +1,4 @@
 setuptools
 pyaudio
 keyboard
-aliyun-python-sdk-core==2.13.3
-PySide2
-pywin32
+loguru

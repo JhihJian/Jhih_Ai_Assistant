@@ -30,6 +30,8 @@ class Recorder(object):
             data = self.stream.read(self.CHUNK)
             frames.append(data)
         return frames
+    def get_record_data(self):
+        return b''.join(self.get_record_audio())
 
     def __del__(self):
         self.stream.stop_stream()

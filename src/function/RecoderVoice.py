@@ -46,16 +46,17 @@ class RecordVoice:
                                  rate=self.RATE, input=True, input_device_index=self.device_index,
                                  frames_per_buffer=self.CHUNK)
         print("recording started")
-        record_frames = []
-
-        for i in range(0, int(self.RATE / self.CHUNK * self.MAX_RECORD_TIME)):
-            if not self.voice_recording:
-                break
+        self.record_frames = []
+        while self.voice_recording:
             data = stream.read(self.CHUNK)
-            record_frames.append(data)
+            self.record_frames.append(data)
+        # for i in range(0, int(self.RATE / self.CHUNK * self.MAX_RECORD_TIME)):
+        #     if not self.voice_recording:
+        #         break
+        #     data = stream.read(self.CHUNK)
+        #     record_frames.append(data)
 
-        print("recording stopped,记录长度:" + str(len(record_frames)))
-
+        print("recording stopped,记录长度:" + str(len(self.record_frames)))
         stream.stop_stream()
         stream.close()
 

@@ -18,10 +18,12 @@ def py_ivw_callback(sessionID, msg, param1, param2, info, userDate):
 CALLBACKFUNC = CFUNCTYPE(None, c_char_p, c_uint64,
                          c_uint64, c_uint64, c_voidp, c_voidp)
 pCallbackFunc = CALLBACKFUNC(py_ivw_callback)
+#加载msc.lib文件
 
 
 def ivw_wakeup():
     try:
+
         msc_load_library = r'.\..\..\lib\kedaxunfei\bin\msc_x64.dll'
         app_id = 'fc780f5a'# 填写自己的app_id
         ivw_threshold = '0:1450'

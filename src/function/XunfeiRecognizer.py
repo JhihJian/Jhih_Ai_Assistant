@@ -18,9 +18,9 @@ STATUS_FIRST_FRAME = 0  # 第一帧的标识
 STATUS_CONTINUE_FRAME = 1  # 中间帧标识
 STATUS_LAST_FRAME = 2  # 最后一帧的标识
 
-APPID = ''
-APISecret = ''
-APIKey = ''
+APPID = 'fc780f5a'
+APISecret = 'NzQ2MzdiMDQwNTBlZWQ1NjNkYzY1OGU2'
+APIKey = 'a8f61f43023fdebc164849cfbc22c9cb'
 
 
 class Ws_Param(object):
@@ -97,7 +97,7 @@ class VoiceRecognizer:
     data = []
     识别器准备就绪 = False
     status = STATUS_FIRST_FRAME  # 音频的状态信息，标识音频是第一帧，还是中间帧、最后一帧
-    frameSize = 1280  # 每一帧的音频大小
+    frameSize = 1024  # 每一帧的音频大小
     interval = 0.04  # 发送音频间隔(单位:s)
     resultText = ''
 
@@ -114,8 +114,8 @@ class VoiceRecognizer:
         self.识别器准备就绪 = True
 
     def __init__(self):
-        self.wsParam = Ws_Param(APPID='fc780f5a', APISecret='NzQ2MzdiMDQwNTBlZWQ1NjNkYzY1OGU2',
-                                APIKey='a8f61f43023fdebc164849cfbc22c9cb')
+        self.wsParam = Ws_Param(APPID=APPID, APISecret=APISecret,
+                                APIKey=APIKey)
         websocket.enableTrace(False)
         wsUrl = self.wsParam.create_url()
         self.ws = websocket.WebSocketApp(wsUrl, on_error=self.on_error, on_close=self.on_close)
@@ -130,12 +130,13 @@ class VoiceRecognizer:
     # 发送识别的数据
     def send(self, data):
         time1 = datetime.now()
+        time.sleep(0.04)
         while not self.识别器准备就绪:
             time.sleep(0.01)
         if self.status == STATUS_FIRST_FRAME:
             time2 = datetime.now()
             print("wait 识别器准备就绪 cost:" + str(time2 - time1))
-        # print("send data len:" + str(len(data)) + ",status:" + str(self.status))
+        print("send data len:" + str(len(data)) + ",status:" + str(self.status))
         d = self.wsParam.get_json_data(self.status, data)
         self.ws.send(d)
         self.status = STATUS_CONTINUE_FRAME
@@ -169,29 +170,29 @@ class VoiceRecognizer:
         # 空白的结束标识
         # d = self.wsParam.get_json_data(self.status, b'')
         # self.ws.send(d)
-
         self.ws.close()
+        print("resultText:" + self.resultText)
 
 
 if __name__ == "__main__":
     t1 = datetime.now()
-    AudioFile = r'C:/Users/jhihjian/Downloads/iat_pcm_16k.pcm'
+    AudioFile = 'K:/3-WorkSpace/2-Python-Projects/Jhih_Ai_Assistant/src/function/recordedFile.wav'
     # 测试时候在此处正确填写相关信息即可运行
     recognizer = VoiceRecognizer()
     threading.Thread(target=recognizer.run).start()
 
     with open(AudioFile, "rb") as fp:
         while True:
-            buf = fp.read(recognizer.frameSize)
+            buf = fp.read(1280)
             # 文件结束
             if not buf:
                 recognizer.finish()
-                time.sleep(1)
+                time.sleep(1.5)
                 break
             recognizer.send(buf)
             # 模拟音频采样间隔
             time.sleep(recognizer.interval)
 
-    print("resultText:" + recognizer.resultText)
+    # print("resultText:" + recognizer.resultText)
     t2 = datetime.now()
     print(t2 - t1)

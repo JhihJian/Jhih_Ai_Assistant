@@ -6,7 +6,7 @@ import time
 import keyboard
 import pyaudio
 
-MC_KEY_NAME = "摄像头麦克风"
+MC_KEY_NAME = "输入麦克风"
 
 
 class RecordVoice:

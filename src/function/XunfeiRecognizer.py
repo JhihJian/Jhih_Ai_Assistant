@@ -180,18 +180,26 @@ if __name__ == "__main__":
     # 测试时候在此处正确填写相关信息即可运行
     recognizer = VoiceRecognizer()
     threading.Thread(target=recognizer.run).start()
-
     with open(AudioFile, "rb") as fp:
-        while True:
-            buf = fp.read(1280)
-            # 文件结束
-            if not buf:
-                recognizer.finish()
-                time.sleep(1.5)
-                break
-            recognizer.send(buf)
-            # 模拟音频采样间隔
-            time.sleep(recognizer.interval)
+        data = fp.read()
+    slices = zip(*(iter(data),) * 1280)
+    for i in slices:
+        recognizer.send(bytes(i))
+        time.sleep(0.01)
+    recognizer.finish()
+    time.sleep(1.5)
+
+    # with open(AudioFile, "rb") as fp:
+    #     while True:
+    #         buf = fp.read(1280)
+    #         # 文件结束
+    #         if not buf:
+    #             recognizer.finish()
+    #             time.sleep(1.5)
+    #             break
+    #         recognizer.send(buf)
+    #         # 模拟音频采样间隔
+    #         time.sleep(recognizer.interval)
 
     # print("resultText:" + recognizer.resultText)
     t2 = datetime.now()

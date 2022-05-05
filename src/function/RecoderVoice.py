@@ -21,10 +21,16 @@ class RecordVoice:
     device_index = 1
     on_finish = None
     on_recording = None
+    on_begin = None  # 建立录音线程时进行
+    is_ready = None
 
-    def __init__(self):
-        self.audio = pyaudio.PyAudio()
+    def __init__(self, audio=pyaudio.PyAudio(), on_finish=None, on_recording=None, on_begin=None, is_ready=None):
+        self.audio = audio
         self.device_index = self.choose_device()
+        self.on_begin = on_begin
+        self.on_recording = on_recording
+        self.on_finish = on_finish
+        self.is_ready = is_ready
 
     def choose_device(self):
         info = self.audio.get_host_api_info_by_index(0)
@@ -45,6 +51,9 @@ class RecordVoice:
         return deviceIndex
 
     def recording(self):
+
+        # if not self.audio:
+        #     self.audio = pyaudio.PyAudio()
         stream = self.audio.open(format=self.FORMAT, channels=self.CHANNELS,
                                  rate=self.RATE, input=True, input_device_index=self.device_index,
                                  frames_per_buffer=self.CHUNK)
@@ -59,12 +68,16 @@ class RecordVoice:
             data = stream.read(self.CHUNK)
             self.record_frames.append(data)
 
-            if self.on_recording:
-                try:
-                    time.sleep(0.1)
-                    self.on_recording(data)
-                except Exception as e:
-                    print("error from on_recording {}: {}".format(self.on_recording, e))
+            # if self.on_recording:
+            #     if self.is_ready:
+            #         while not self.is_ready():
+            #             time.sleep(0.01)
+            #     try:
+            #         print("on_recording")
+            #         time.sleep(0.1)
+            #         self.on_recording(data)
+            #     except Exception as e:
+            #         print("error from on_recording {}: {}".format(self.on_recording, e))
 
         print("recording stopped,记录长度:" + str(len(self.record_frames)))
         stream.stop_stream()
@@ -97,9 +110,16 @@ class RecordVoice:
                     self.record_frames = []
                     self.voice_recording = True
                     threading.Thread(target=self.recording).start()  # 开始录音
+                    if self.on_begin:
+                        print("on_begin")
+                        try:
+                            threading.Thread(target=self.on_begin).start()
+                        except Exception as e:
+                            print("error from on_begin {}: {}".format(self.on_begin, e))
 
-            except:
-                print('process 启动失败')
+            except Exception as e:
+                print('process 启动失败 error :{}'.format(e))
+
         elif event.event_type == "up":
             print("录音结束")
             self.voice_recording = False

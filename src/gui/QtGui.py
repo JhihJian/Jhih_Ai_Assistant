@@ -16,11 +16,9 @@ form.setupUi(window)
 window.show()
 
 # ----------------------------------
-print("recognizer begin")
-recognizer = AliRecognizer()
-audio = pyaudio.PyAudio()
-recordVoice = RecordVoice(audio=audio, on_begin=recognizer.run, on_recording=recognizer.send,
-                          on_finish=recognizer.finish, is_ready=recognizer.is_ready)
+recordVoice = RecordVoice()
+recognizer = AliRecognizer(recordVoice.get_record_frames, recordVoice.is_recoder_finish)
+recordVoice.on_begin = recognizer.run
 # 开始监听大写锁定键()
 keyboard.hook_key('caps lock', recordVoice.trick_hook_key)
 # ----------------------------------

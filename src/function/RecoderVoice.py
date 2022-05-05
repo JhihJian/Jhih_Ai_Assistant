@@ -19,18 +19,24 @@ class RecordVoice:
     recording_finish = False
     record_frames = []
     device_index = 1
-    on_finish = None
-    on_recording = None
+    # on_finish = None
+    # on_recording = None
     on_begin = None  # 建立录音线程时进行
     is_ready = None
+
+    def get_record_frames(self):
+        return self.record_frames
+
+    def is_recoder_finish(self):
+        return not self.voice_recording
 
     def __init__(self, audio=pyaudio.PyAudio(), on_finish=None, on_recording=None, on_begin=None, is_ready=None):
         self.audio = audio
         self.device_index = self.choose_device()
         self.on_begin = on_begin
-        self.on_recording = on_recording
-        self.on_finish = on_finish
-        self.is_ready = is_ready
+        # self.on_recording = on_recording
+        # self.on_finish = on_finish
+        # self.is_ready = is_ready
 
     def choose_device(self):
         info = self.audio.get_host_api_info_by_index(0)
@@ -88,12 +94,12 @@ class RecordVoice:
         while not self.recording_finish:
             time.sleep(0.01)
         self.audio.terminate()
-        if self.on_finish:
-            print("on_finish")
-            try:
-                self.on_finish()
-            except Exception as e:
-                print("error from on_finish {}: {}".format(self.on_finish, e))
+        # if self.on_finish:
+        #     print("on_finish")
+        #     try:
+        #         self.on_finish()
+        #     except Exception as e:
+        #         print("error from on_finish {}: {}".format(self.on_finish, e))
         self.save_to_file()
 
     # 按键被触发
@@ -113,7 +119,7 @@ class RecordVoice:
                     if self.on_begin:
                         print("on_begin")
                         try:
-                            threading.Thread(target=self.on_begin).start()
+                            self.on_begin()
                         except Exception as e:
                             print("error from on_begin {}: {}".format(self.on_begin, e))
 
@@ -141,11 +147,6 @@ class RecordVoice:
         waveFile.setframerate(self.RATE)
         waveFile.writeframes(b''.join(self.record_frames))
         waveFile.close()
-
-
-def test(hook):
-    print("test")
-    time.sleep(1)
 
 
 def monitor(hook):

@@ -25,4 +25,5 @@ keyboard.hook_key('caps lock', recordVoice.trick_hook_key)
 
 
 app.exec()
+# recordVoice.audio.terminate()
 print("app.exec()")

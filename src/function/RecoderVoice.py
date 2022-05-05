@@ -6,9 +6,12 @@ import time
 import keyboard
 import pyaudio
 
+from src.function.CapsLockMonitor import CapsLockMonitor
+
 MC_KEY_NAME = "输入麦克风"
 
 
+# audio.terminate() 没有调用
 class RecordVoice:
     CHUNK = 1024  # 数据包或者数据片段
     FORMAT = pyaudio.paInt16  # pyaudio.paInt16表示我们使用量化位数 16位来进行录音
@@ -19,10 +22,25 @@ class RecordVoice:
     recording_finish = False
     record_frames = []
     device_index = 1
-    # on_finish = None
-    # on_recording = None
     on_begin = None  # 建立录音线程时进行
     is_ready = None
+
+    def beginRecordVoice(self):
+        print("开始录音")
+        self.record_frames = []
+        self.voice_recording = True
+        threading.Thread(target=self.recording).start()  # 开始录音
+        if self.on_begin:
+            print("on_begin")
+            try:
+                self.on_begin()
+            except Exception as e:
+                print("error from on_begin {}: {}".format(self.on_begin, e))
+
+    def finishRecordVoice(self):
+        print("录音结束")
+        self.voice_recording = False
+        self.finish()
 
     def get_record_frames(self):
         return self.record_frames
@@ -30,13 +48,10 @@ class RecordVoice:
     def is_recoder_finish(self):
         return not self.voice_recording
 
-    def __init__(self, audio=pyaudio.PyAudio(), on_finish=None, on_recording=None, on_begin=None, is_ready=None):
+    def __init__(self, audio=pyaudio.PyAudio(), on_begin=None):
         self.audio = audio
         self.device_index = self.choose_device()
         self.on_begin = on_begin
-        # self.on_recording = on_recording
-        # self.on_finish = on_finish
-        # self.is_ready = is_ready
 
     def choose_device(self):
         info = self.audio.get_host_api_info_by_index(0)
@@ -58,32 +73,17 @@ class RecordVoice:
 
     def recording(self):
 
-        # if not self.audio:
-        #     self.audio = pyaudio.PyAudio()
         stream = self.audio.open(format=self.FORMAT, channels=self.CHANNELS,
                                  rate=self.RATE, input=True, input_device_index=self.device_index,
                                  frames_per_buffer=self.CHUNK)
         print("recording started")
         self.record_frames = []
-        # while self.voice_recording:
-        #     data = stream.read(self.CHUNK)
-        #     self.record_frames.append(data)
+
         for i in range(0, int(self.RATE / self.CHUNK * self.MAX_RECORD_TIME)):
             if not self.voice_recording:
                 break
             data = stream.read(self.CHUNK)
             self.record_frames.append(data)
-
-            # if self.on_recording:
-            #     if self.is_ready:
-            #         while not self.is_ready():
-            #             time.sleep(0.01)
-            #     try:
-            #         print("on_recording")
-            #         time.sleep(0.1)
-            #         self.on_recording(data)
-            #     except Exception as e:
-            #         print("error from on_recording {}: {}".format(self.on_recording, e))
 
         print("recording stopped,记录长度:" + str(len(self.record_frames)))
         stream.stop_stream()
@@ -93,51 +93,8 @@ class RecordVoice:
     def finish(self):
         while not self.recording_finish:
             time.sleep(0.01)
-        self.audio.terminate()
-        # if self.on_finish:
-        #     print("on_finish")
-        #     try:
-        #         self.on_finish()
-        #     except Exception as e:
-        #         print("error from on_finish {}: {}".format(self.on_finish, e))
+        # self.audio.terminate()
         self.save_to_file()
-
-    # 按键被触发
-    # 长按会一直触发down事件
-    def trick_hook_key(self, event):
-        if event.event_type == "down":
-            try:
-                # 已经在运行就不触发
-                if self.voice_recording:
-                    # print("已经在运行就不触发")
-                    pass
-                else:
-                    print("开始录音")
-                    self.record_frames = []
-                    self.voice_recording = True
-                    threading.Thread(target=self.recording).start()  # 开始录音
-                    if self.on_begin:
-                        print("on_begin")
-                        try:
-                            self.on_begin()
-                        except Exception as e:
-                            print("error from on_begin {}: {}".format(self.on_begin, e))
-
-            except Exception as e:
-                print('process 启动失败 error :{}'.format(e))
-
-        elif event.event_type == "up":
-            print("录音结束")
-            self.voice_recording = False
-            self.finish()
-            # print("self.finish")
-        else:
-            print(event.event_type)
-            pass
-        # print("trick_hook_key finish")
-
-    def get_voice_frame(self):
-        return self.record_frames
 
     def save_to_file(self):
         WAVE_OUTPUT_FILENAME = "recordedFile.wav"
@@ -149,19 +106,13 @@ class RecordVoice:
         waveFile.close()
 
 
-def monitor(hook):
-    # 开始监听大写锁定键()
-    keyboard.hook_key('caps lock', hook)
-    print("keyboard.hook_key 结束")
-    # print("monitor finish")
-
-
 if __name__ == '__main__':
     recordVoice = RecordVoice()
+
+    monitor = CapsLockMonitor(begin_event_hook=recordVoice.beginRecordVoice,
+                              finish_event_hook=recordVoice.finishRecordVoice)
     # 开始监听大写锁定键()
-    # keyboard.hook_key('caps lock', recordVoice.trick_hook_key)
-    # print("keyboard.hook_key 结束")
-    threading.Thread(target=monitor, args=[recordVoice.trick_hook_key]).start()
+    monitor.run()
+
     # 阻塞进程
     keyboard.wait()
-    print("main finish")

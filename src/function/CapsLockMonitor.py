@@ -5,7 +5,7 @@ import keyboard
 
 
 class CapsLockMonitor:
-    wait_time = 300 * 1000  # 设置监听缓存时间，长按300毫秒后开始
+    wait_time = 200 * 1000  # 设置监听缓存时间，长按300毫秒后开始
     __on_running = False  # 是否已经开始运行
     is_trigger_down = False  # 是否之前按下了CapsLock键
     trigger_down_time = datetime.now()  # 刚开始按下的时间
@@ -26,7 +26,7 @@ class CapsLockMonitor:
             if self.is_trigger_down:
                 diff = (datetime.now() - self.trigger_down_time).microseconds
                 if diff < self.wait_time:
-                    print("时间没到不运行 {}".format(diff))
+                    # print("时间没到不运行 {}".format(diff))
                     return
             else:
                 self.trigger_down_time = datetime.now()
@@ -61,6 +61,8 @@ class CapsLockMonitor:
                     self.__finishEventHook()
                 except Exception as e:
                     print("error from finishEventHook {}: {}".format(self.__finishEventHook, e))
+            # 取消大写
+            keyboard.press_and_release('caps lock')
         else:
             print(event.event_type)
             pass

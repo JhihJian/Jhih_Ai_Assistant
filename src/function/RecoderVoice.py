@@ -6,7 +6,7 @@ import time
 import keyboard
 import pyaudio
 
-from src.function.CapsLockMonitor import CapsLockMonitor
+from function.CapsLockMonitor import CapsLockMonitor
 
 MC_KEY_NAME = "输入麦克风"
 

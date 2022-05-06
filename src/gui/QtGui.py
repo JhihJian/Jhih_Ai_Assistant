@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QApplication
 import keyboard
 
 from src.function.AliRecognizer import AliRecognizer
+from src.function.CapsLockMonitor import CapsLockMonitor
 from src.function.RecoderVoice import RecordVoice
 
 Form, Window = uic.loadUiType("./../../asserts/Guyu-Assistant.ui")
@@ -16,11 +17,21 @@ form.setupUi(window)
 window.show()
 
 # ----------------------------------
+
 recordVoice = RecordVoice()
 recognizer = AliRecognizer(recordVoice.get_record_frames, recordVoice.is_recoder_finish)
-recordVoice.on_begin = recognizer.run
-# 开始监听大写锁定键()
-keyboard.hook_key('caps lock', recordVoice.trick_hook_key)
+
+
+def begin_hook():
+    recordVoice.beginRecordVoice()
+    recognizer.run()
+
+
+# 监听大写锁定键()
+monitor = CapsLockMonitor(begin_event_hook=begin_hook,
+                          finish_event_hook=recordVoice.finishRecordVoice)
+monitor.run()
+
 # ----------------------------------
 
 

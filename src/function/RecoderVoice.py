@@ -22,7 +22,6 @@ class RecordVoice:
     recording_finish = False
     record_frames = []
     device_index = 1
-    on_begin = None  # 建立录音线程时进行
     is_ready = None
 
     def beginRecordVoice(self):
@@ -30,12 +29,6 @@ class RecordVoice:
         self.record_frames = []
         self.voice_recording = True
         threading.Thread(target=self.recording).start()  # 开始录音
-        if self.on_begin:
-            print("on_begin")
-            try:
-                self.on_begin()
-            except Exception as e:
-                print("error from on_begin {}: {}".format(self.on_begin, e))
 
     def finishRecordVoice(self):
         print("录音结束")
@@ -48,10 +41,9 @@ class RecordVoice:
     def is_recoder_finish(self):
         return not self.voice_recording
 
-    def __init__(self, audio=pyaudio.PyAudio(), on_begin=None):
+    def __init__(self, audio=pyaudio.PyAudio()):
         self.audio = audio
         self.device_index = self.choose_device()
-        self.on_begin = on_begin
 
     def choose_device(self):
         info = self.audio.get_host_api_info_by_index(0)
@@ -72,11 +64,9 @@ class RecordVoice:
         return deviceIndex
 
     def recording(self):
-
         stream = self.audio.open(format=self.FORMAT, channels=self.CHANNELS,
                                  rate=self.RATE, input=True, input_device_index=self.device_index,
                                  frames_per_buffer=self.CHUNK)
-        print("recording started")
         self.record_frames = []
 
         for i in range(0, int(self.RATE / self.CHUNK * self.MAX_RECORD_TIME)):
@@ -108,7 +98,6 @@ class RecordVoice:
 
 if __name__ == '__main__':
     recordVoice = RecordVoice()
-
     monitor = CapsLockMonitor(begin_event_hook=recordVoice.beginRecordVoice,
                               finish_event_hook=recordVoice.finishRecordVoice)
     # 开始监听大写锁定键()

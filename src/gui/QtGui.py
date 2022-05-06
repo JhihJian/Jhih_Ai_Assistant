@@ -1,6 +1,7 @@
 import pyaudio
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 
 import keyboard
 
@@ -9,13 +10,43 @@ from src.function.CapsLockMonitor import CapsLockMonitor
 from src.function.RecoderVoice import RecordVoice
 
 Form, Window = uic.loadUiType("./../../asserts/Guyu-Assistant.ui")
+images_path = "./../../asserts/images/"
 
 app = QApplication([])
+app.setQuitOnLastWindowClosed(False)
 window = Window()
 form = Form()
 form.setupUi(window)
-window.show()
 
+# create icon
+icon = QIcon(images_path + "icon.png")
+tray_icon = QIcon(images_path + "tray_icon.png")
+app.setWindowIcon(icon)
+# create tray
+tray = QSystemTrayIcon()
+tray.setIcon(tray_icon)
+tray.setVisible(True)
+# create menu
+menu = QMenu()
+action = QAction("I'm Guyu")
+menu.addAction(action)
+
+# add show option
+show = QAction("Show Windows")
+show.triggered.connect(window.show)
+menu.addAction(show)
+
+# add quit option
+quit = QAction("Quit")
+quit.triggered.connect(app.quit)
+menu.addAction(quit)
+
+# Add the menu to the tray
+tray.setContextMenu(menu)
+
+# form = Form()
+# form.setupUi(window)
+# window.show()
 # ----------------------------------
 
 recordVoice = RecordVoice()

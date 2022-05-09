@@ -1,8 +1,5 @@
 setuptools
-pyaudio
 keyboard
-websocket
-aliyun-python-sdk-core
-alibabacloud-nls-java-sdk
+websockets
 loguru
 PySide6

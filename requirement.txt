@@ -4,3 +4,5 @@ websockets
 loguru
 PySide6
 psutil
+opencv-python
+plyvel-win32

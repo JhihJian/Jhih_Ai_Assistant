@@ -1,9 +1,21 @@
 # Jhih_Ai_Assistant
 
-联合了qq机器人， 功能
+plyvel 使用leveldb 作嵌入式数据库
 
-安装
+联合了qq机器人， 功能 注册机器人服务开机自启
 
+```
+nssm install GuyuQQ
+配置
+Application
+- Path  start.cmd的路径
+- Startup directory start.cmd的目录
+Details
+- DisplayName GuyuQQService
+Sevice name:GuyuQQ 
+```
+
+注：[nssm 下载地址](http://nssm.cc/download)
 阿里云sdk nls包
 
 ```

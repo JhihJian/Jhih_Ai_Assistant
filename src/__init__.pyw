@@ -4,8 +4,11 @@ from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow,
 
 import keyboard
 
+from function import Curl
 from function.AliRecognizer import AliRecognizer
 from function.CapsLockMonitor import CapsLockMonitor
+from function.DbHelper import DbHelper
+from function.QQSocket import MonitorQQ
 from function.RecoderVoice import RecordVoice
 
 import sys, os
@@ -77,10 +80,8 @@ if __name__ == '__main__':
     # Add the menu to the tray
     tray.setContextMenu(menu)
     tray.show()
-    # ---------__create_tray_menu--------------------------
 
-    window.show()
-
+    # --------------监听大写锁定键进行录音--------------
     recordVoice = RecordVoice()
     recognizer = AliRecognizer(recordVoice.get_record_frames, recordVoice.is_recoder_finish,
                                recognizer_callalbe=window.update_text)
@@ -96,7 +97,24 @@ if __name__ == '__main__':
                               finish_event_hook=recordVoice.finishRecordVoice)
     monitor.run()
 
-    # ----------------------------------
+    # --------------监听QQ消息--------------------
+    qq = MonitorQQ()
+    qq.run()
+    # --------------进行每日任务---------------
+    from datetime import date
+
+    db = DbHelper()
+    if db.get_db_day() != date.today():
+        # 进行每日任务
+        if Curl.git_doc_is_online():
+            msg = "每日任务：检查jhihjian.github.io博客，已完成，运行正常"
+            qq.send_message(msg)
+        else:
+            msg = "每日任务：检查jhihjian.github.io博客，已完成，运行错误"
+            qq.send_message(msg)
+
+        # 完成每日任务
+        db.update_db_day()
 
     app.exec()
     # recordVoice.audio.terminate()

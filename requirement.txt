@@ -3,3 +3,4 @@ keyboard
 websockets
 loguru
 PySide6
+psutil

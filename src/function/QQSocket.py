@@ -5,6 +5,8 @@ import json
 
 import websockets
 
+from function.QueryProcess import QueryProcess
+
 SEND_MESSAGE_TEMPLATE = """
 {
     "action": "send_private_msg",
@@ -45,8 +47,15 @@ async def monitor_message():
 
 
 def handle_message(websocket, sender_id, message):
-    reply_message = "hello {},what's {}".format(sender_id, message)
-    # data = SEND_MESSAGE_TEMPLATE.format(sender_id, reply_message)
+    reply_message = ""
+    if message == "哥哥在打游戏吗":
+        query_process = QueryProcess()
+        if query_process.IsPlayingLol():
+            reply_message = "在，游戏客户端开始时间:{}".format(query_process.IsPlayingLol())
+        else:
+            reply_message = "没，我也不知道他在干嘛"
+    else:
+        reply_message = "hello {},what's {}".format(sender_id, message)
     data = json.loads(SEND_MESSAGE_TEMPLATE)
     data["params"]["user_id"] = sender_id
     data["params"]["message"] = reply_message
@@ -73,4 +82,3 @@ async def send_message_test():
 
 if __name__ == '__main__':
     asyncio.run(monitor_message())
-    print("主线保持")

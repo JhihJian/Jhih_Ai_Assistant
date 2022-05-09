@@ -1,5 +1,7 @@
 # Jhih_Ai_Assistant
 
+联合了qq机器人， 功能
+
 安装
 
 阿里云sdk nls包

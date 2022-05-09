@@ -1,5 +1,15 @@
 # Jhih_Ai_Assistant
 
+安装
+
+阿里云sdk nls包
+
+```
+cd ./lib/alibabacloud-nls-python-sdk-0.0.1 
+pip install -r requirements.txt 
+python -m pip install .
+```
+
 语音交互 Ai智能助手
 
 ## 打包

@@ -28,7 +28,7 @@ python -m pip install .
 
 ## 打包
 
-`pyinstaller .\guyu.spec`
+`pyinstaller .\__init__.spec`
 
 ## 功能点
 

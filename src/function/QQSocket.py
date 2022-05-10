@@ -7,6 +7,7 @@ from threading import Thread
 
 import websockets
 
+from function.DbHelper import DbHelper
 from function.QueryProcess import QueryProcess
 
 SEND_MESSAGE_TEMPLATE = """
@@ -56,8 +57,41 @@ def handle_message(websocket, sender_id, message):
             reply_message = "在，游戏客户端开始时间:{}".format(query_process.IsPlayingLol())
         else:
             reply_message = "没，我也不知道他在干嘛"
+    elif message == "查询仔仔分数":
+        db = DbHelper()
+        score = db.get_zz_score()
+        reply_message = "仔仔当前分数为:{}".format(score)
+    elif message == "查询仔仔分数原因":
+        db = DbHelper()
+        reasons = db.get_zz_score_reasons()
+        reply_message = "仔仔当前分数原因为:\n{}".format(reasons)
+    elif message.startswith("更新仔仔分数") and str(sender_id) == "980858153":
+        try:
+            infos = message.split(",")
+            db = DbHelper()
+            db.update_zz_score(int(infos[1]), infos[2])
+            reply_message = "更新成功"
+        except Exception as e:
+            reply_message = "更新失败，{}".format(e)
+    elif message == "查询健健分数":
+        db = DbHelper()
+        score = db.get_jj_score()
+        reply_message = "健健当前分数为:{}".format(score)
+    elif message == "查询健健分数原因":
+        db = DbHelper()
+        reasons = db.get_jj_score_reasons()
+        reply_message = "健健当前分数原因为:\n{}".format(reasons)
+    elif message.startswith("更新健健分数") and str(sender_id) == "980858153":
+        try:
+            infos = message.split(",")
+            db = DbHelper()
+            db.update_jj_score(int(infos[1]), infos[2])
+            reply_message = "更新成功"
+        except Exception as e:
+            reply_message = "更新失败，{}".format(e)
     else:
         reply_message = "hello {},what's {}".format(sender_id, message)
+
     data = json.loads(SEND_MESSAGE_TEMPLATE)
     data["params"]["user_id"] = sender_id
     data["params"]["message"] = reply_message

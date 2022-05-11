@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # Add the menu to the tray
     tray.setContextMenu(menu)
     tray.show()
-
+    window.show()
     # --------------监听大写锁定键进行录音--------------
     recordVoice = RecordVoice()
     recognizer = AliRecognizer(recordVoice.get_record_frames, recordVoice.is_recoder_finish,

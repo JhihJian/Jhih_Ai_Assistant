@@ -100,6 +100,7 @@ if __name__ == '__main__':
     # --------------监听QQ消息--------------------
     qq = MonitorQQ()
     qq.run()
+    qq.send_message_to_all("嘀嘀嘀，谷雨上线")
     # --------------进行每日任务---------------
     from datetime import date
 
@@ -119,3 +120,4 @@ if __name__ == '__main__':
     app.exec()
     # recordVoice.audio.terminate()
     print("app.exec()")
+    qq.send_message_to_all("嘀嘀嘀，谷雨下线")

@@ -103,8 +103,8 @@ async def send_message(websocket, data):
     await websocket.send(data)
 
 
-async def send_message_alone(message):
-    sender_id = 980858153
+async def send_message_alone(target_id, message):
+    sender_id = target_id
     data = json.loads(SEND_MESSAGE_TEMPLATE)
     data["params"]["user_id"] = sender_id
     data["params"]["message"] = message
@@ -115,10 +115,10 @@ async def send_message_alone(message):
         print(result)
 
 
-def call_send_entry(message):
+def call_send_entry(target_id, message):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(send_message_alone(message))
+    loop.run_until_complete(send_message_alone(target_id, message))
     loop.close()
 
 
@@ -130,7 +130,6 @@ def call_monitor_entry():
 
 
 class MonitorQQ:
-
     # async method on other threading loop run
     # 如何将异步函数传递给 Python 中的线程目标？
 
@@ -138,9 +137,17 @@ class MonitorQQ:
         _thread = threading.Thread(target=call_monitor_entry, )
         _thread.start()
 
-    def send_message(self, message):
-        _thread = threading.Thread(target=call_send_entry, args=[message])
+    def send_message_to_JJ(self, message):
+        _thread = threading.Thread(target=call_send_entry, args=[980858153, message])
         _thread.start()
+
+    def send_message_to_ZZ(self, message):
+        _thread = threading.Thread(target=call_send_entry, args=[1600074410, message])
+        _thread.start()
+
+    def send_message_to_all(self, message):
+        self.send_message_to_JJ(message)
+        self.send_message_to_ZZ(message)
 
 
 if __name__ == '__main__':

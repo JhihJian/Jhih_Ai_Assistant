@@ -10,6 +10,7 @@ from function.CapsLockMonitor import CapsLockMonitor
 from function.DbHelper import DbHelper
 from function.QQSocket import MonitorQQ
 from function.RecoderVoice import RecordVoice
+import logging
 
 import sys, os
 
@@ -22,6 +23,9 @@ try:
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except ImportError:
     pass
+
+
+# 配置日志
 
 
 class MainWindow(QMainWindow):

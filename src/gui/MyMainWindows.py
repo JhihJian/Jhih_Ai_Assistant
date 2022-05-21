@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QAction
-from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel, QWidget
 
 import keyboard
 
@@ -9,6 +9,8 @@ import logging
 import sys, os
 
 from gui import page_chage
+from gui.FunctionItem import FunctionItem
+from gui.Ui_FuntionItem import Ui_FunctionItem
 
 basedir = os.path.dirname(__file__)
 
@@ -60,8 +62,18 @@ class MainWindow(page_chage.Ui_MainWindow, QMainWindow):
         ch.setFormatter(log_format)
         ch.setLevel(logging.DEBUG)
         logger.addHandler(ch)
-
         logger.info('程序已启动')
+
+        # 添加function 列表
+        functionItem1 = FunctionItem()
+        functionItem1.offline_icon_2.setVisible(False)
+        functionItem1.functionButton_2.setText("功能1")
+        self.functionListLayout.addWidget(functionItem1)
+
+        functionItem2 = FunctionItem()
+        functionItem2.offline_icon_2.setVisible(True)
+        functionItem2.functionButton_2.setText("功能2")
+        self.functionListLayout.addWidget(functionItem2)
 
 
 if __name__ == '__main__':

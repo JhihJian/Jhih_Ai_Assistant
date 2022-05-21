@@ -20,6 +20,9 @@ Python 版本 3.8.10
 
 -------------------------------------------------------------------
 
+qt ui file to python file
+
+`pyside6-uic asserts/page_change.ui -o src/gui/page_chage.py`
 
 待完成功能
 

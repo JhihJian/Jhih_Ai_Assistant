@@ -8,6 +8,8 @@ import logging
 
 import sys, os
 
+from gui import page_chage
+
 basedir = os.path.dirname(__file__)
 
 try:
@@ -19,33 +21,51 @@ except ImportError:
     pass
 
 
-class MainWindow(QMainWindow):
+class QTextEditLogger(logging.Handler):
+    def __init__(self, widget):
+        super().__init__()
+        # self.widget = QtWidgets.QPlainTextEdit(parent)
+        # self.widget.setReadOnly(True)
+        self.widget = widget
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.widget.appendPlainText(msg)
+
+
+class MainWindow(page_chage.Ui_MainWindow, QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-
+        self.setupUi(self)
         self.setWindowTitle("Guyu Assistant")
-        self.__create_lable_widget()
+        # 设置切换页面按钮
+        self.pushButton.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(0)))
+        self.pushButton_2.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(1)))
+        self.pushButton_3.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(2)))
 
-    # def __create_quit_button(self):
-    # self.quit_button = QButton()
+        # 日志基本配置
+        log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        logger = logging.getLogger("MainWindow")
+        logger.setLevel(logging.DEBUG)
+        # 文件日志输出
+        fh = logging.FileHandler('example.log')
+        fh.setFormatter(log_format)
+        # 界面日志输出
+        logTextBox = QTextEditLogger(self.LogTextArea)
+        logTextBox.setFormatter(log_format)
+        logTextBox.setLevel(logging.INFO)
+        logger.addHandler(logTextBox)
+        # 控制台日志输出
+        ch = logging.StreamHandler()
+        ch.setFormatter(log_format)
+        ch.setLevel(logging.DEBUG)
+        logger.addHandler(ch)
 
-    def __create_lable_widget(self):
-        self.lable_widget = QLabel("Hello")
-        font = self.lable_widget.font()
-        font.setPointSize(30)
-        self.lable_widget.setFont(font)
-        self.lable_widget.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        self.setCentralWidget(self.lable_widget)
-
-    def update_text(self, text):
-        if not self.isActiveWindow():
-            keyboard.write(text)
-        self.lable_widget.setText(text)
+        logger.info('程序已启动')
 
 
 if __name__ == '__main__':
     app = QApplication([])
-    app.setQuitOnLastWindowClosed(False)
     window = MainWindow()
     window.show()
     app.exec()

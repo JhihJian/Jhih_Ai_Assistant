@@ -22,15 +22,15 @@ Python 版本 3.8.10
 
 qt ui file to python file
 
-`pyside6-uic asserts/page_change.ui -o src/gui/page_chage.py`
+`pyside6-uic asserts/MainWindows.ui -o src/gui/Ui_MainWindows.py`
 
 qt resource file to python file，注意，这个名字my_r_rc 要和ui py导入中的相同
 
-`pyside6-rcc -o src/gui/my_r_rc.py asserts/my_r.qrc`
+`pyside6-rcc -o src/gui/resources_rc.py asserts/resources.qrc`
 
 使用自定组件
 
-` pyside6-uic asserts/FunctionItem.ui -o src/gui/Ui_FuntionItem.py`
+`pyside6-uic asserts/FunctionItem.ui -o src/gui/Ui_FuntionItem.py`
 
 待完成功能
 

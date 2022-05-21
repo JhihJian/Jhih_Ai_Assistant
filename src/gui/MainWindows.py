@@ -8,9 +8,10 @@ import logging
 
 import sys, os
 
-from gui import page_chage
+from gui import Ui_MainWindows
 from gui.FunctionItem import FunctionItem
 from gui.Ui_FuntionItem import Ui_FunctionItem
+from gui.Ui_MainWindows import Ui_MainWindow
 
 basedir = os.path.dirname(__file__)
 
@@ -35,7 +36,7 @@ class QTextEditLogger(logging.Handler):
         self.widget.appendPlainText(msg)
 
 
-class MainWindow(page_chage.Ui_MainWindow, QMainWindow):
+class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'page_change.ui'
+## Form generated from reading UI file 'MainWindows.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.3.0
 ##
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QLayout, QMainWindow, QPlainTextEdit, QPushButton,
     QSizePolicy, QStackedWidget, QStatusBar, QVBoxLayout,
     QWidget)
-import my_r_rc
+import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -28,13 +28,13 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 673)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.layoutWidget = QWidget(self.centralwidget)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(10, 0, 781, 651))
-        self.horizontalLayout = QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.frame_2 = QFrame(self.layoutWidget)
+        self.layoutWidget1 = QWidget(self.centralwidget)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(10, 0, 781, 651))
+        self.two_split = QHBoxLayout(self.layoutWidget1)
+        self.two_split.setObjectName(u"two_split")
+        self.two_split.setContentsMargins(0, 0, 0, 0)
+        self.frame_2 = QFrame(self.layoutWidget1)
         self.frame_2.setObjectName(u"frame_2")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(1)
@@ -43,32 +43,32 @@ class Ui_MainWindow(object):
         self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QFrame.Raised)
-        self.layoutWidget1 = QWidget(self.frame_2)
-        self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(10, 70, 77, 195))
-        self.verticalLayout = QVBoxLayout(self.layoutWidget1)
+        self.layoutWidget2 = QWidget(self.frame_2)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(10, 70, 77, 195))
+        self.verticalLayout = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout.setSpacing(2)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.pushButton = QPushButton(self.layoutWidget1)
+        self.pushButton = QPushButton(self.layoutWidget2)
         self.pushButton.setObjectName(u"pushButton")
 
         self.verticalLayout.addWidget(self.pushButton)
 
-        self.pushButton_2 = QPushButton(self.layoutWidget1)
+        self.pushButton_2 = QPushButton(self.layoutWidget2)
         self.pushButton_2.setObjectName(u"pushButton_2")
 
         self.verticalLayout.addWidget(self.pushButton_2)
 
-        self.pushButton_3 = QPushButton(self.layoutWidget1)
+        self.pushButton_3 = QPushButton(self.layoutWidget2)
         self.pushButton_3.setObjectName(u"pushButton_3")
 
         self.verticalLayout.addWidget(self.pushButton_3)
 
 
-        self.horizontalLayout.addWidget(self.frame_2)
+        self.two_split.addWidget(self.frame_2)
 
-        self.frame = QFrame(self.layoutWidget)
+        self.frame = QFrame(self.layoutWidget1)
         self.frame.setObjectName(u"frame")
         sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(5)
@@ -101,23 +101,23 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(0, 0, 271, 101))
         self.label_2.setFont(font)
-        self.layoutWidget2 = QWidget(self.page_2)
-        self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(-10, 120, 651, 481))
-        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
+        self.layoutWidget3 = QWidget(self.page_2)
+        self.layoutWidget3.setObjectName(u"layoutWidget3")
+        self.layoutWidget3.setGeometry(QRect(-10, 120, 651, 481))
+        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget3)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.frame_4 = QFrame(self.layoutWidget2)
-        self.frame_4.setObjectName(u"frame_4")
+        self.function_list_frame = QFrame(self.layoutWidget3)
+        self.function_list_frame.setObjectName(u"function_list_frame")
         sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy3.setHorizontalStretch(2)
         sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.frame_4.sizePolicy().hasHeightForWidth())
-        self.frame_4.setSizePolicy(sizePolicy3)
-        self.frame_4.setAutoFillBackground(False)
-        self.frame_4.setFrameShape(QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QFrame.Raised)
-        self.verticalLayoutWidget = QWidget(self.frame_4)
+        sizePolicy3.setHeightForWidth(self.function_list_frame.sizePolicy().hasHeightForWidth())
+        self.function_list_frame.setSizePolicy(sizePolicy3)
+        self.function_list_frame.setAutoFillBackground(False)
+        self.function_list_frame.setFrameShape(QFrame.StyledPanel)
+        self.function_list_frame.setFrameShadow(QFrame.Raised)
+        self.verticalLayoutWidget = QWidget(self.function_list_frame)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
         self.verticalLayoutWidget.setGeometry(QRect(10, 0, 181, 481))
         self.functionListLayout = QVBoxLayout(self.verticalLayoutWidget)
@@ -126,9 +126,9 @@ class Ui_MainWindow(object):
         self.functionListLayout.setSizeConstraint(QLayout.SetMinAndMaxSize)
         self.functionListLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.horizontalLayout_2.addWidget(self.frame_4)
+        self.horizontalLayout_2.addWidget(self.function_list_frame)
 
-        self.frame_3 = QFrame(self.layoutWidget2)
+        self.frame_3 = QFrame(self.layoutWidget3)
         self.frame_3.setObjectName(u"frame_3")
         sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy4.setHorizontalStretch(5)
@@ -158,7 +158,7 @@ class Ui_MainWindow(object):
         self.LogTextArea.setReadOnly(True)
         self.stackedWidget.addWidget(self.page_3)
 
-        self.horizontalLayout.addWidget(self.frame)
+        self.two_split.addWidget(self.frame)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)

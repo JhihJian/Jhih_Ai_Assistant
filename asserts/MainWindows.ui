@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="layoutWidget1">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -23,7 +23,7 @@
       <height>651</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="two_split">
      <item>
       <widget class="QFrame" name="frame_2">
        <property name="sizePolicy">
@@ -38,7 +38,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget2">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -149,7 +149,7 @@
            <string>界面2</string>
           </property>
          </widget>
-         <widget class="QWidget" name="layoutWidget">
+         <widget class="QWidget" name="layoutWidget3">
           <property name="geometry">
            <rect>
             <x>-10</x>
@@ -160,7 +160,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QFrame" name="frame_4">
+            <widget class="QFrame" name="function_list_frame">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>2</horstretch>
@@ -270,7 +270,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="my_r.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

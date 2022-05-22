@@ -1,5 +1,6 @@
 import time
 import datetime
+import pygetwindow as gw
 
 import psutil
 
@@ -9,10 +10,13 @@ import psutil
 
 LOL_PROCESS_NAME = "LeagueClient.exe"
 
+IN_LOL_CHOOSE = "League of Legends"
+IN_LOL_GAMING = "League of Legends (TM) Client"
+
 
 class QueryProcess:
     # 如果在返回开始时间，否则返回空
-    def IsPlayingLol(self):
+    def IsPlayingLol_OLD(self):
         process_info = self._find_procs_by_name(LOL_PROCESS_NAME)
         print(process_info)
         if process_info:
@@ -42,11 +46,25 @@ class QueryProcess:
             fmt = "%Y-%m-%d %H:%M:%S"
         return datetime.datetime.fromtimestamp(secs).strftime(fmt)
 
+    def IsPlayingLol(self):
+        active_windows_title = gw.getActiveWindow().title
+        if active_windows_title == IN_LOL_GAMING:
+            return True
+        return False
+
 
 if __name__ == '__main__':
-    q = QueryProcess()
-    if q.IsPlayingLol():
-        print(q.IsPlayingLol())
-    else:
-        print("No")
+
+    while True:
+        try:
+            print(gw.getActiveWindow().title == IN_LOL_GAMING)
+        except Exception as e:
+            print(e)
+        time.sleep(3)
+
+    # q = QueryProcess()
+    # if q.IsPlayingLol():
+    #     print(q.IsPlayingLol())
+    # else:
+    #     print("No")
 # [psutil.Process(pid=3852, name='LeagueClientUxRender.exe', status='running', started='20:10:04'), psutil.Process(pid=4452, name='LeagueClientUxRender.exe', status='running', started='20:10:06'), psutil.Process(pid=7032, name='LeagueClientUxRender.exe', status='running', started='20:10:15'), psutil.Process(pid=19692, name='LeagueClientUxRender.exe', status='running', started='20:10:06'), psutil.Process(pid=20212, name='LeagueClientUx.exe', status='running', started='20:10:04'), psutil.Process(pid=23508, name='LeagueClientUxRender.exe', status='running', started='20:10:06'), psutil.Process(pid=25348, name='LeagueClient.exe', status='running', started='20:10:00'), psutil.Process(pid=25760, name='LeagueClientUxRender.exe', status='running', started='20:10:07')]

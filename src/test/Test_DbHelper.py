@@ -1,12 +1,12 @@
 import unittest
 
-import function.DbHelper
-from function.DbHelper import DbHelper
+import db.DbHelper
+from db.DbHelper import DbHelper
 
 
 class Test_DbHelper(unittest.TestCase):
     def setUp(self):
-        self.db_name = function.DbHelper.DB_NAME = "test_db"
+        self.db_name = db.DbHelper.DB_NAME = "test_db"
         self.db = DbHelper()
         print("before test")
 

@@ -7,12 +7,11 @@ import keyboard
 from function import Curl
 from function.AliRecognizer import AliRecognizer
 from function.CapsLockMonitor import CapsLockMonitor
-from function.DbHelper import DbHelper
+from db.DbHelper import DbHelper
 from function.QQSocket import MonitorQQ
 from function.RecoderVoice import RecordVoice
-import logging
 
-import sys, os
+import os
 
 basedir = os.path.dirname(__file__)
 

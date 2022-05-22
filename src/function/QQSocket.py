@@ -3,11 +3,10 @@
 import asyncio
 import json
 import threading
-from threading import Thread
 
 import websockets
 
-from function.DbHelper import DbHelper
+from db.DbHelper import DbHelper
 from function.QueryProcess import QueryProcess
 
 SEND_MESSAGE_TEMPLATE = """

@@ -111,7 +111,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
+    app.setApplicationName("Guyu-Assistant")
     window = MainWindow()
     window.show()
+    app_name = QApplication.applicationName()
+    print(app_name)
     app.exec()
     print("test")

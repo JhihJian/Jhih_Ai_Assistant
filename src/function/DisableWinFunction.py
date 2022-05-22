@@ -16,6 +16,7 @@ class DisableWinFunction(BaseFunction):
     wait_time = 150 * 1000  # 在1000ms 内连按两次ctrl 屏蔽之
 
     def __init__(self):
+        super().__init__()
         self.m_process = None
         self.check_process = None
         self.on_playing_lol = False

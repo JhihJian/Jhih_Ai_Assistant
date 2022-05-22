@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel, QWidget
 
@@ -8,6 +8,7 @@ import logging
 
 import sys, os
 
+from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
 from gui import Ui_MainWindows
 from gui.FunctionItem import FunctionItem
@@ -63,6 +64,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.setWindowTitle("Guyu Assistant")
+        db = DbHelper()
 
         # 设置日志
         logger_config(self.LogTextArea)
@@ -74,15 +76,35 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         # 添加function 列表
         disable_win_function_item = FunctionItem()
-        disable_win_function_item.offline_icon.setVisible(False)
         disable_win_function_item.function_button.setText("禁用Win")
         self.functionListLayout.addWidget(disable_win_function_item)
         disable_win_function = DisableWinFunction()
-        
-        functionItem2 = FunctionItem()
-        functionItem2.offline_icon_2.setVisible(True)
-        functionItem2.functionButton_2.setText("功能2")
-        self.functionListLayout.addWidget(functionItem2)
+
+        if db.get_str_by_key("DisableWinFunction_ISOPEN") == "FALSE":
+            # 如果默认为关闭状态
+            pass
+        else:
+            disable_win_function.start()
+
+        disable_win_function_item.start_button.clicked.connect(disable_win_function.start)
+        disable_win_function_item.quit_button.clicked.connect(disable_win_function.quit)
+
+        def update_online_icon():
+            if disable_win_function.isOnline():
+                disable_win_function_item.offline_icon.setVisible(False)
+                disable_win_function_item.start_button.setVisible(False)
+                disable_win_function_item.online_icon.setVisible(True)
+                disable_win_function_item.quit_button.setVisible(True)
+            else:
+                disable_win_function_item.online_icon.setVisible(False)
+                disable_win_function_item.quit_button.setVisible(False)
+                disable_win_function_item.offline_icon.setVisible(True)
+                disable_win_function_item.start_button.setVisible(True)
+
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(update_online_icon)
+        self.timer.start()
 
         # 功能1 qq监听
 

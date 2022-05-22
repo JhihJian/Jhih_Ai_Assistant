@@ -7,8 +7,8 @@ import keyboard
 from function import Curl
 from function.AliRecognizer import AliRecognizer
 from function.CapsLockMonitor import CapsLockMonitor
-from db.DbHelper import DbHelper
-from function.QQSocket import MonitorQQ
+from util.DbHelper import DbHelper
+from function.QQSocket import MonitorQQFunction
 from function.RecoderVoice import RecordVoice
 
 import os
@@ -101,8 +101,8 @@ if __name__ == '__main__':
     monitor.run()
 
     # --------------监听QQ消息--------------------
-    qq = MonitorQQ()
-    qq.run()
+    qq = MonitorQQFunction()
+    qq.start()
     qq.send_message_to_all("嘀嘀嘀，谷雨上线")
     # --------------进行每日任务---------------
     from datetime import date

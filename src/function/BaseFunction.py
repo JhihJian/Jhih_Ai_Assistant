@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 
@@ -12,6 +13,9 @@ class BaseFunction:
     function_name = "BaseFunction"
     function_status = FunctionStatus.STOP
 
+    def __init__(self):
+        self.logger = logging.getLogger("MainWindow")
+
     def register(self):
         pass
 
@@ -24,3 +28,6 @@ class BaseFunction:
     def quit(self):
         self.function_status = FunctionStatus.STOP
         pass
+
+    def isOnline(self):
+        return self.function_status == FunctionStatus.RUNNING

@@ -135,6 +135,23 @@ class Ui_MainWindow(object):
         self.function_display.setAutoFillBackground(False)
         self.function_display.setFrameShape(QFrame.StyledPanel)
         self.function_display.setFrameShadow(QFrame.Raised)
+        self.function_widget = QStackedWidget(self.function_display)
+        self.function_widget.setObjectName(u"function_widget")
+        self.function_widget.setGeometry(QRect(10, 10, 301, 461))
+        sizePolicy2.setHeightForWidth(self.function_widget.sizePolicy().hasHeightForWidth())
+        self.function_widget.setSizePolicy(sizePolicy2)
+        self.defaut_page = QWidget()
+        self.defaut_page.setObjectName(u"defaut_page")
+        self.function_title = QLabel(self.defaut_page)
+        self.function_title.setObjectName(u"function_title")
+        self.function_title.setGeometry(QRect(10, 0, 71, 41))
+        self.function_describe = QLabel(self.defaut_page)
+        self.function_describe.setObjectName(u"function_describe")
+        self.function_describe.setGeometry(QRect(20, 50, 261, 41))
+        self.function_widget.addWidget(self.defaut_page)
+        self.page_3 = QWidget()
+        self.page_3.setObjectName(u"page_3")
+        self.function_widget.addWidget(self.page_3)
 
         self.function_page_layout.addWidget(self.function_display)
 
@@ -173,6 +190,8 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u65e5\u5fd7", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u754c\u97621", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u754c\u97622", None))
+        self.function_title.setText(QCoreApplication.translate("MainWindow", u"\u8bf4\u660e", None))
+        self.function_describe.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.LogTextArea.setPlainText("")
     # retranslateUi
 

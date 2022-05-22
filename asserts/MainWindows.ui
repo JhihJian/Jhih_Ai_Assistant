@@ -146,7 +146,7 @@
            </font>
           </property>
           <property name="text">
-           <string>界面2</string>
+           <string>功能列表</string>
           </property>
          </widget>
          <widget class="QWidget" name="layoutWidget3">
@@ -213,6 +213,51 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
+             <widget class="QStackedWidget" name="function_widget">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>301</width>
+                <height>461</height>
+               </rect>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <widget class="QWidget" name="defaut_page">
+               <widget class="QLabel" name="function_title">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>0</y>
+                  <width>71</width>
+                  <height>41</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>说明</string>
+                </property>
+               </widget>
+               <widget class="QLabel" name="function_describe">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>50</y>
+                  <width>261</width>
+                  <height>41</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>TextLabel</string>
+                </property>
+               </widget>
+              </widget>
+              <widget class="QWidget" name="page_3"/>
+             </widget>
             </widget>
            </item>
           </layout>

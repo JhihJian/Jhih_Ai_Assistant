@@ -1,16 +1,14 @@
 import logging
-import multiprocessing
 import threading
 import time
 
 from pynput import keyboard
 from datetime import datetime
-import keyboard as kb
 
 from function.BaseFunction import *
 
 # 当检测到游戏进程开始时，自动禁用按键
-from function.QueryProcess import QueryProcess
+from util.QueryProcess import QueryProcess
 
 
 class DisableWinFunction(BaseFunction):
@@ -23,23 +21,26 @@ class DisableWinFunction(BaseFunction):
         self.on_playing_lol = False
         self.last_time = datetime.now()
         self.pre_event = 257
-        self.logger = logging.getLogger("MianWindows")
 
     def register(self):
         pass
 
     def start(self):
         self.function_status = FunctionStatus.STARTING
-        self.m_process = multiprocessing.Process(target=self.__run__)
-        self.check_process = multiprocessing.Process(target=self.__checkGamingStatus__)
+        # self.m_process = multiprocessing.Process(target=self.__run__)
+        self.m_process = threading.Thread(target=self.__run__)
+        # self.check_process = multiprocessing.Process(target=self.__checkGamingStatus__)
+        self.check_process = threading.Thread(target=self.__checkGamingStatus__)
         self.m_process.start()
-        self.check_process.start()
+        # self.check_process.start()
         self.function_status = FunctionStatus.RUNNING
-        logging.getLogger("MainWindows")
+        self.logger.info("禁用Win辅助服务：启动中...")
 
     def quit(self):
         if self.m_process.is_alive():
-            self.m_process.terminate()
+            # self.m_process.terminate()
+            self.listener.stop()
+            self.logger.info("")
         if self.check_process.is_alive():
             self.check_process.terminate()
         self.function_status = FunctionStatus.STOP
@@ -99,4 +100,6 @@ def test():
 if __name__ == '__main__':
     d = DisableWinFunction()
     d.start()
-    kb.wait()
+    time.sleep(2)
+    d.quit()
+    # kb.wait()

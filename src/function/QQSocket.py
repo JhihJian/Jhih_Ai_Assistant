@@ -3,11 +3,13 @@
 import asyncio
 import json
 import threading
+import time
 
 import websockets
 
-from db.DbHelper import DbHelper
-from function.QueryProcess import QueryProcess
+from function.BaseFunction import BaseFunction, FunctionStatus
+from util.DbHelper import DbHelper
+from util.QueryProcess import QueryProcess
 
 SEND_MESSAGE_TEMPLATE = """
 {
@@ -121,20 +123,37 @@ def call_send_entry(target_id, message):
     loop.close()
 
 
-def call_monitor_entry():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(monitor_message())
-    loop.close()
+class MonitorQQFunction(BaseFunction):
+    function_name = "MonitorQQFunction"
 
-
-class MonitorQQ:
     # async method on other threading loop run
     # 如何将异步函数传递给 Python 中的线程目标？
 
-    def run(self):
-        _thread = threading.Thread(target=call_monitor_entry, )
+    def __init__(self):
+        super().__init__()
+        self.loop = None
+
+    def start(self):
+        self.function_status = FunctionStatus.STARTING
+        self.loop = asyncio.new_event_loop()
+
+        def call_monitor_entry(loop):
+            asyncio.set_event_loop(loop)
+            loop.create_task(monitor_message())
+            loop.run_forever()
+            loop.close()
+
+        _thread = threading.Thread(target=call_monitor_entry, args=[self.loop])
         _thread.start()
+        self.function_status = FunctionStatus.RUNNING
+        pass
+
+    def quit(self):
+        self.loop.stop()
+        while not self.loop.is_closed():
+            time.sleep(0.1)
+        self.function_status = FunctionStatus.STOP
+        pass
 
     def send_message_to_JJ(self, message):
         _thread = threading.Thread(target=call_send_entry, args=[980858153, message])
@@ -150,7 +169,9 @@ class MonitorQQ:
 
 
 if __name__ == '__main__':
-    qq = MonitorQQ()
-    qq.run()
-    qq.send_message("测试")
+    qq = MonitorQQFunction()
+    qq.start()
+    qq.send_message_to_JJ("测试")
+    time.sleep(3)
+    qq.quit()
     print("主线程继续执行")

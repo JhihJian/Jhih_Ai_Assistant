@@ -24,6 +24,13 @@ class DbHelper:
             DbHelper._instance = object.__new__(cls)
         return DbHelper._instance
 
+    def get_str_by_key(self, key):
+        result = self.db.get(key.encode())
+        return result.decode() if result else ""
+
+    def store_str_by_key(self, key, value):
+        self.db.put(key.encode(), value.encode())
+
     # compare: today = date.today()
     def get_db_day(self):
         data = self.db.get(b'today')

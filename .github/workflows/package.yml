@@ -27,7 +27,7 @@ jobs:
           pyinstaller .\__init__.spec
       - uses: actions/upload-artifact@v2
         with:
-          name: guyu-${{ GITHUB_REF_NAME }}-windows-amd64.zip
+          name: guyu-${{ github.ref_name }}-windows-amd64.zip
           path: dist
 
       #      - name: upload windows artifact
@@ -49,8 +49,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: artifacts
-          tag: ${{ GITHUB_REF_NAME }}
-          name: Guyu ${{ GITHUB_REF_NAME }}
+          tag: ${{ github.ref_name }}
+          name: Guyu ${{ github.ref_name }}
           bodyFile: RELEASE.md
           draft: false
           prerelease: false

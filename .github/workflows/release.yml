@@ -22,6 +22,6 @@ jobs:
         run: |
           pyinstaller .\__init__.spec
       - uses: actions/upload-artifact@v2
-          with:
-            name: guyu-artifact
-            path: dist
+        with:
+          name: guyu-artifact
+          path: dist

@@ -1,6 +1,31 @@
 # Jhih_Ai_Assistant
 
 ----------------------
+Git push 报错
+
+```commandline
+error: dst refspec main matches more than one
+```
+
+有branch和tag 同名的情况 删除分支 `git push origin :refs/tags/<tagname>`
+----------------------
+自动更新功能
+
+1. 怎么知道有新的版本号
+   https://github.com/JhihJian/Jhih_Ai_Assistant/releases/latest
+
+2. 怎么下载最新的release包
+   https://github.com/JhihJian/Jhih_Ai_Assistant/releases/download/v1.0.0/guyu-v1.0.0-windows-amd64.zip
+
+3. 项目需要公开，否则无法访问release，既然要公开就必须得脱敏
+
+使用bfg工具 删除敏感文件提交历史 [下载|文档]( https://rtyley.github.io/bfg-repo-cleaner/)
+
+1. 下载jar包到根目录
+2. `java -jar bfg.jar --delete-files AliRecognizer.py` AliRecognizer.py 为要清除记录的文件
+3. `git reflog expire --expire=now --all && git gc --prune=now --aggressive`
+
+----------------------
 
 ## 发版本
 

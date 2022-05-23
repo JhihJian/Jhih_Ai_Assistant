@@ -9,15 +9,16 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
+                            QMetaObject, QObject, QPoint, QRect,
+                            QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+                           QFont, QFontDatabase, QGradient, QIcon,
+                           QImage, QKeySequence, QLinearGradient, QPainter,
+                           QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QLabel, QPushButton,
-    QSizePolicy, QWidget)
-import resources_rc
+                               QSizePolicy, QWidget)
+import gui.resources_rc
+
 
 class Ui_FunctionItem(object):
     def setupUi(self, FunctionItem):
@@ -60,8 +61,8 @@ class Ui_FunctionItem(object):
 
         self.function_button.setDefault(False)
 
-
         QMetaObject.connectSlotsByName(FunctionItem)
+
     # setupUi
 
     def retranslateUi(self, FunctionItem):
@@ -72,4 +73,3 @@ class Ui_FunctionItem(object):
         self.start_button.setText(QCoreApplication.translate("FunctionItem", u"START", None))
         self.quit_button.setText(QCoreApplication.translate("FunctionItem", u"QUIT", None))
     # retranslateUi
-

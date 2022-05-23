@@ -28,6 +28,7 @@ class DisableWinFunction(BaseFunction):
 
     def start(self):
         self.function_status = FunctionStatus.STARTING
+        self.logger.info("禁用Win辅助服务：启动中...")
         # self.m_process = multiprocessing.Process(target=self.__run__)
         self.m_process = threading.Thread(target=self.__run__)
         # self.check_process = multiprocessing.Process(target=self.__checkGamingStatus__)
@@ -35,7 +36,6 @@ class DisableWinFunction(BaseFunction):
         self.m_process.start()
         # self.check_process.start()
         self.function_status = FunctionStatus.RUNNING
-        self.logger.info("禁用Win辅助服务：启动中...")
 
     def quit(self):
         if self.m_process.is_alive():
@@ -49,6 +49,7 @@ class DisableWinFunction(BaseFunction):
 
     def __checkGamingStatus__(self):
         q = QueryProcess()
+        self.logger.info("禁用Win辅助服务：启动完成")
         while True:
             is_playing_lol = q.IsPlayingLol()
             if self.on_playing_lol != is_playing_lol:

@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['src\\__init__.pyw'],
+    ['src\\gui\\MainWindows.py'],
     pathex=[],
     binaries=[],
     datas=[],

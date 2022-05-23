@@ -1,3 +1,5 @@
+import sys
+
 import plyvel
 import os
 from datetime import date
@@ -15,8 +17,8 @@ class DbHelper:
     def __init__(self):
         if not hasattr(DbHelper, "_first_init"):
             # 用basedir 报错，无法创建db
-            # basedir = os.path.dirname(__file__)
-            self.db = plyvel.DB(os.path.join(DB_NAME), create_if_missing=True)
+
+            self.db = plyvel.DB(os.path.join(os.path.dirname(sys.executable), DB_NAME), create_if_missing=True)
             DbHelper._first_init = True
 
     def __new__(cls):
@@ -98,7 +100,6 @@ class DbHelper:
 if __name__ == '__main__':
     db = DbHelper()
     db = DbHelper()
-    db.test_del(b'today')
     db.update_db_day()
     print(db.get_db_day() == date.today())
-    db.test_del(b'today')
+    del db

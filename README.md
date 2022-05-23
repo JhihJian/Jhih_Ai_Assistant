@@ -37,6 +37,25 @@ TODO
 
 -------------------------------------------------------------------
 
+### 打包
+
+`pyinstaller .\__init__.spec`
+
+遇到问题，打包的时候，resources_rc.py没有加载，运行Guyu.exe 报错，No module name resources_rc
+
+因为生成路径不对
+
+import resources_rc 改为 import gui.resources_rc
+
+遇到问题，设置注册表自动启动后，无法应用无法随windows启动，报错 plyvel._plyvel.Error: b'NotFound: guyu-db/LOCK:
+
+创建DB时使用的是相对路径，所以出错 plyvel.DB("guyu-db")
+改为 plyvel.DB(os.path.join(os.path.dirname(sys.executable), DB_NAME))
+
+-------------------------------------------------------------------
+
+### 编译
+
 qt ui file to python file
 
 `pyside6-uic asserts/MainWindows.ui -o src/gui/Ui_MainWindows.py`
@@ -48,7 +67,7 @@ qt resource file to python file，注意，这个名字my_r_rc 要和ui py导入
 使用自定组件
 
 `pyside6-uic asserts/FunctionItem.ui -o src/gui/Ui_FuntionItem.py`
-
+-------------------------------------------------------------------
 待完成功能
 
 1. 上线 下线通知
@@ -81,10 +100,6 @@ python -m pip install .
 ```
 
 语音交互 Ai智能助手
-
-## 打包
-
-`pyinstaller .\__init__.spec`
 
 ## 功能点
 

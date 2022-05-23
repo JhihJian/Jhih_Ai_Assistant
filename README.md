@@ -2,10 +2,18 @@
 
 1.0.0版本包括以下内容
 
-- GitHub Package Action
-- 开机自启设置
-- 监测在游戏内禁用Win键
-- 日志界面
+    - title: 已完成的功能 🎉
+      labels:
+        - GitHub Package Action
+        - 开机自启设置
+        - 监测在游戏内禁用Win键
+        - 日志界面
+
+    - title: 1.0.1版本的计划 🛠
+      labels:
+        - 增加 qq消息监听
+        - GitHub Page 健康检查
+        - 软件自动更新
 
 **Full Changelog**: https://github.com/JhihJian/Jhih_Ai_Assistant/commits/1.0.0
 

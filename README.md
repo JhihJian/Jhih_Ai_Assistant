@@ -1,5 +1,16 @@
 # Jhih_Ai_Assistant
 
+1.0.0版本包括以下内容
+
+- GitHub Package Action
+- 开机自启设置
+- 监测在游戏内禁用Win键
+- 日志界面
+
+**Full Changelog**: https://github.com/JhihJian/Jhih_Ai_Assistant/commits/1.0.0
+
+guyu-1.0.0-windows-amd64.zip
+
 Python 版本 3.8.10
 
 TODO

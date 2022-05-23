@@ -48,7 +48,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: artifacts
+          artifacts: artifacts/*
           tag: ${{ github.ref_name }}
           name: Guyu ${{ github.ref_name }}
           bodyFile: RELEASE.md

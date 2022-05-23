@@ -9,6 +9,15 @@ test
 error: dst refspec main matches more than one
 ```
 
+git pull 报错
+
+```
+fatal: refusing to merge unrelated histories
+```
+
+--allow-unrelated-histories
+
+
 有branch和tag 同名的情况 删除分支 `git push origin :refs/tags/<tagname>`
 ----------------------
 自动更新功能
@@ -28,9 +37,17 @@ error: dst refspec main matches more than one
 3. `git reflog expire --expire=now --all && git gc --prune=now --aggressive`
    还是能查到 https://github.com/JhihJian/Jhih_Ai_Assistant/blob/a1435d3fc717f4f2815e6880a1d096a2007c182d/src/function/AliRecognizer.py?spm=5176.12948882.sas.7.448369c6GGLeqO&file=AliRecognizer.py
 
-java -jar bfg.jar --replace-text
+搞了两种方法，都无法完全删除，搞了半天，翻到最下面，还要联系支持。。。 不说了，改key 去了
 
-git filter-repo --invert-paths --path src/function/AliRecognizer.py
+从 GitHub 中完全删除数据 在使用 BFG 工具或git filter-repo删除敏感数据并将更改推送到 GitHub 后，您必须采取更多步骤才能从 GitHub 中完全删除数据。
+
+联系GitHub 支持，要求他们删除缓存的视图和对 GitHub 上拉取请求中敏感数据的引用。请提供存储库的名称和/或您需要删除的提交的链接。
+
+
+
+
+
+
 ----------------------
 
 ## 发版本

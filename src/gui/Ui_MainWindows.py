@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QLayout, QMainWindow, QPlainTextEdit, QPushButton,
-    QSizePolicy, QStackedWidget, QStatusBar, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
+    QLabel, QLayout, QMainWindow, QPlainTextEdit,
+    QPushButton, QSizePolicy, QStackedWidget, QStatusBar,
+    QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -55,15 +55,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.pushButton)
 
-        self.pushButton_2 = QPushButton(self.layoutWidget2)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.function_button = QPushButton(self.layoutWidget2)
+        self.function_button.setObjectName(u"function_button")
 
-        self.verticalLayout.addWidget(self.pushButton_2)
+        self.verticalLayout.addWidget(self.function_button)
 
-        self.pushButton_3 = QPushButton(self.layoutWidget2)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.log_button = QPushButton(self.layoutWidget2)
+        self.log_button.setObjectName(u"log_button")
 
-        self.verticalLayout.addWidget(self.pushButton_3)
+        self.verticalLayout.addWidget(self.log_button)
+
+        self.setting_button = QPushButton(self.layoutWidget2)
+        self.setting_button.setObjectName(u"setting_button")
+
+        self.verticalLayout.addWidget(self.setting_button)
 
 
         self.two_split.addWidget(self.Left_Component_Frame)
@@ -167,6 +172,20 @@ class Ui_MainWindow(object):
         self.LogTextArea.setFont(font1)
         self.LogTextArea.setReadOnly(True)
         self.stackedWidget.addWidget(self.log_page)
+        self.setting_page = QWidget()
+        self.setting_page.setObjectName(u"setting_page")
+        self.verticalLayoutWidget_2 = QWidget(self.setting_page)
+        self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
+        self.verticalLayoutWidget_2.setGeometry(QRect(40, 90, 201, 491))
+        self.setting_layout = QVBoxLayout(self.verticalLayoutWidget_2)
+        self.setting_layout.setObjectName(u"setting_layout")
+        self.setting_layout.setContentsMargins(0, 0, 0, 0)
+        self.auto_start_checkbox = QCheckBox(self.verticalLayoutWidget_2)
+        self.auto_start_checkbox.setObjectName(u"auto_start_checkbox")
+
+        self.setting_layout.addWidget(self.auto_start_checkbox)
+
+        self.stackedWidget.addWidget(self.setting_page)
 
         self.two_split.addWidget(self.Right_Display_Frame)
 
@@ -177,7 +196,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -186,12 +205,14 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u9875\u97621", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"\u529f\u80fd", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u65e5\u5fd7", None))
+        self.function_button.setText(QCoreApplication.translate("MainWindow", u"\u529f\u80fd", None))
+        self.log_button.setText(QCoreApplication.translate("MainWindow", u"\u65e5\u5fd7", None))
+        self.setting_button.setText(QCoreApplication.translate("MainWindow", u"\u8bbe\u7f6e", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u754c\u97621", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u754c\u97622", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u5217\u8868", None))
         self.function_title.setText(QCoreApplication.translate("MainWindow", u"\u8bf4\u660e", None))
         self.function_describe.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.LogTextArea.setPlainText("")
+        self.auto_start_checkbox.setText(QCoreApplication.translate("MainWindow", u"\u662f\u5426\u5f00\u673a\u81ea\u542f", None))
     # retranslateUi
 

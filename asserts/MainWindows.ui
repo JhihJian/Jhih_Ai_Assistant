@@ -59,16 +59,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="function_button">
            <property name="text">
             <string>功能</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="log_button">
            <property name="text">
             <string>日志</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="setting_button">
+           <property name="text">
+            <string>设置</string>
            </property>
           </widget>
          </item>
@@ -106,7 +113,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page">
          <widget class="QLabel" name="label">
@@ -285,6 +292,27 @@
           <property name="plainText">
            <string/>
           </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="setting_page">
+         <widget class="QWidget" name="verticalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>90</y>
+            <width>201</width>
+            <height>491</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="setting_layout">
+           <item>
+            <widget class="QCheckBox" name="auto_start_checkbox">
+             <property name="text">
+              <string>是否开机自启</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </widget>

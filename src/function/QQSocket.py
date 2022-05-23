@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import logging
 import threading
 import time
 
@@ -11,6 +12,7 @@ from function.BaseFunction import BaseFunction, FunctionStatus
 from util.DbHelper import DbHelper
 from util.QueryProcess import QueryProcess
 
+logger = logging.getLogger("MainWindow")
 SEND_MESSAGE_TEMPLATE = """
 {
     "action": "send_private_msg",
@@ -23,10 +25,14 @@ SEND_MESSAGE_TEMPLATE = """
 """
 
 
+def on_message(msg):
+    print(msg)
+
+
 # {"font":0,"message":"sad","message_id":24727482,"message_type":"private","post_type":"message","raw_message":"sad","self_id":1935912438,"sender":{"age":0,"nickname":"Jhih","sex":"unknown","user_id":980858153},"sub_type":"friend","target_id":1935912438,"time":1652083856,"user_id":980858153}
 # {"interval":5000,"meta_event_type":"heartbeat","post_type":"meta_event","self_id":1935912438,"status":{"app_enabled":true,"app_good":true,"app_initialized":true,"good":true,"online":true,"plugins_good":null,"stat":{"PacketReceived":178,"PacketSent":163,"PacketLost":0,"MessageReceived":3,"MessageSent":5,"LastMessageTime":1652083856,"DisconnectTimes":0,"LostTimes":0}},"time":1652083858}
 async def monitor_message():
-    async with websockets.connect("ws://localhost:6700/") as websocket:
+    async with websockets.connect("ws://localhost:6700/", logger=logger) as websocket:
         while True:
             r_data = json.loads(await websocket.recv())
             # 心跳测试
@@ -38,16 +44,16 @@ async def monitor_message():
                     sender_id = r_data["sender"]["user_id"]
                     sender_nick_name = r_data["sender"]["nickname"]
                     message = r_data["message"]
-                    print("sender id:{} name:{} send message:{}".format(sender_id, sender_nick_name, message))
+                    logger.info("sender id:{} name:{} send message:{}".format(sender_id, sender_nick_name, message))
                 except Exception as e:
-                    print("load json data failed exception:{} data:{}".format(e, r_data))
+                    logger.error("load json data failed exception:{} data:{}".format(e, r_data))
 
                 try:
                     handle_message(websocket, sender_id, message)
                 except Exception as e:
-                    print("send data failed exception:{}".format(e))
+                    logger.error("send data failed exception:{}".format(e))
             else:
-                print(r_data)
+                logger.info(r_data)
 
 
 def handle_message(websocket, sender_id, message):

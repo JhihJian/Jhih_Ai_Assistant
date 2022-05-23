@@ -24,9 +24,13 @@ error: dst refspec main matches more than one
 使用bfg工具 删除敏感文件提交历史 [下载|文档]( https://rtyley.github.io/bfg-repo-cleaner/)
 
 1. 下载jar包到根目录
-2. `java -jar bfg.jar --delete-files AliRecognizer.py` AliRecognizer.py 为要清除记录的文件
+2. `java -jar bfg.jar --no-blob-protection --delete-files AliRecognizer.py` AliRecognizer.py 为要清除记录的文件
 3. `git reflog expire --expire=now --all && git gc --prune=now --aggressive`
+   还是能查到 https://github.com/JhihJian/Jhih_Ai_Assistant/blob/a1435d3fc717f4f2815e6880a1d096a2007c182d/src/function/AliRecognizer.py?spm=5176.12948882.sas.7.448369c6GGLeqO&file=AliRecognizer.py
 
+java -jar bfg.jar --replace-text
+
+git filter-repo --invert-paths --path src/function/AliRecognizer.py
 ----------------------
 
 ## 发版本

@@ -25,10 +25,17 @@ jobs:
       - name: build with pyinstaller
         run: |
           pyinstaller .\__init__.spec
-      - uses: actions/upload-artifact@v2
+      #      - uses: actions/upload-artifact@v2
+      #        with:
+      #          name: guyu-${{ github.ref_name }}-windows-amd64.zip
+      #          path: dist
+
+
+      # Zipping the directory dir into dir.zip
+      - uses: montudor/action-zip@v1
         with:
-          name: guyu-${{ github.ref_name }}-windows-amd64.zip
-          path: dist
+          args: zip -qq -r guyu-${{ github.ref_name }}-windows-amd64.zip dist
+
 
       #      - name: upload windows artifact
       #        uses: actions/upload-release-asset@v1
@@ -48,7 +55,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: artifacts/guyu-${{ github.ref_name }}-windows-amd64.zip
+          artifacts: guyu-${{ github.ref_name }}-windows-amd64.zip
           tag: ${{ github.ref_name }}
           name: Guyu ${{ github.ref_name }}
           bodyFile: RELEASE.md

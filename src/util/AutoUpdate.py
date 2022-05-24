@@ -6,6 +6,10 @@ import sys
 import urllib.request
 import zipfile
 
+from PySide6.QtWidgets import QApplication
+
+from util import AppSetting
+
 RELEASE_LATEST_API_URL = "https://api.github.com/repos/JhihJian/Jhih_Ai_Assistant/releases/latest"
 import urllib.request
 
@@ -39,15 +43,11 @@ move /Y dist\* .
 
 rmdir dist
 
+start Guyu.exe
+
 (goto) 2>nul & del "%~f0"
+
 """
-
-
-def downloadFileFromUrl_retrieve(download_url, store_dir):
-    file_name = getFileNameFromUrl(download_url)
-    file_path = os.path.join(store_dir, file_name)
-    urllib.request.urlretrieve(download_url, file_path)
-    return file_path
 
 
 def downloadFileFromUrl(download_url, store_dir):
@@ -73,37 +73,38 @@ def downloadFileFromUrl(download_url, store_dir):
 
 
 class AutoUpdate:
-    def __init__(self, current_version):
+    def __init__(self):
         self.logger = logging.getLogger("MainWindow")
-        self.current_version = current_version
-
-    def __isSameVersion__(self, version):
-        return self.current_version == version
 
     # 检查更新
     def checkForUpdate(self):
         try:
             contents = urllib.request.urlopen(RELEASE_LATEST_API_URL).read()
             result = json.loads(contents)
-            version = result["tag_name"]
-            self.logger.info("query latest release:{}".format(version))
-            if self.__isSameVersion__(version):
-                return ""
-            download_url = self.__getDownloadUrl__(result)
-            store_dir = os.path.dirname(sys.executable)
-            self.logger.info("begin download release file...")
-            release_file_path = downloadFileFromUrl(download_url, store_dir)
-            self.logger.info("download {} release in {}".format(version, release_file_path))
-            return release_file_path
+            self.release_version = result["tag_name"]
+            self.logger.info("query latest release:{}".format(self.release_version))
+            if AppSetting.APP_VERSION == self.release_version:
+                return False
+            self.download_url = self.__getDownloadUrl__(result)
+
+            return True
         except Exception as e:
             self.logger.error("check for update failed:{}".format(e))
 
     def updateApp(self):
+        # 下载安装包
+        store_dir = os.path.dirname(sys.executable)
+        self.logger.info("begin download release file...")
+        release_file_path = downloadFileFromUrl(self.download_url, store_dir)
+        self.logger.info("download {} release in {}".format(self.release_version, release_file_path))
+
+        # 运行bat
         bat_file_path = os.path.join(os.path.dirname(sys.executable), "update.bat")
         with open(bat_file_path, 'w') as f:
             f.writelines(cmd_file_content)
         os.system(bat_file_path)
-        sys.exit()
+        # 退出程序
+        QApplication.quit()
 
     def __getDownloadUrl__(self, result):
         assets = result["assets"]
@@ -112,44 +113,6 @@ class AutoUpdate:
             if "windows-amd64" in browser_download_url:
                 return browser_download_url
         raise Exception("not parse release download url")
-
-    def config_log(self):
-        # 日志基本配置
-        log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-        self.logger.setLevel(logging.DEBUG)
-        # 文件日志输出
-        log_file_path = os.path.join(os.path.dirname(sys.executable), 'MainWindow.log')
-        print(log_file_path)
-        fh = logging.FileHandler(log_file_path)
-        fh.setFormatter(log_format)
-        self.logger.addHandler(fh)
-        # 控制台日志输出
-        ch = logging.StreamHandler()
-        ch.setFormatter(log_format)
-        ch.setLevel(logging.DEBUG)
-        self.logger.addHandler(ch)
-        self.logger.info('程序已启动')
-
-    def __install_release__(self, file_path):
-        with zipfile.ZipFile(file_path, "r") as zip_ref:
-            zip_ref.extractall("targetdir")
-
-
-if __name__ == '__main__':
-    ud = AutoUpdate("v0.0.0")
-    if ud.checkForUpdate():
-        ud.updateApp()
-
-    # from urllib import request as urlrequest
-    #
-    # proxy_host = 'localhost:10809'  # host and port of your proxy
-    # url = 'https://www.github.com'
-    #
-    # req = urlrequest.Request(url)
-    # req.set_proxy(proxy_host, 'https')
-    #
-    # response = urlrequest.urlopen(req)
-    # print(response.read().decode('utf8'))
 
 # curl url result example
 # {'url': 'https://api.github.com/repos/JhihJian/Jhih_Ai_Assistant/releases/67532623',

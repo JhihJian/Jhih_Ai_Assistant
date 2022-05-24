@@ -9,18 +9,17 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon,
-                           QImage, QKeySequence, QLinearGradient, QPainter,
-                           QPalette, QPixmap, QRadialGradient, QTransform)
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-                               QLabel, QLayout, QMainWindow, QPlainTextEdit,
-                               QPushButton, QSizePolicy, QStackedWidget, QStatusBar,
-                               QVBoxLayout, QWidget)
-import gui.resources_rc
-
+    QLabel, QLayout, QMainWindow, QPlainTextEdit,
+    QPushButton, QSizePolicy, QStackedWidget, QStatusBar,
+    QVBoxLayout, QWidget)
+from  . import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -81,6 +80,7 @@ class Ui_MainWindow(object):
         self.setting_button.setSizePolicy(sizePolicy1)
 
         self.verticalLayout.addWidget(self.setting_button)
+
 
         self.two_split.addWidget(self.Left_Component_Frame)
 
@@ -218,6 +218,20 @@ class Ui_MainWindow(object):
         font2.setPointSize(16)
         self.version_label.setFont(font2)
         self.version_label.setAlignment(Qt.AlignCenter)
+        self.version_update_button = QPushButton(self.Button_Display_Frame)
+        self.version_update_button.setObjectName(u"version_update_button")
+        self.version_update_button.setGeometry(QRect(580, 0, 111, 31))
+        sizePolicy1.setHeightForWidth(self.version_update_button.sizePolicy().hasHeightForWidth())
+        self.version_update_button.setSizePolicy(sizePolicy1)
+        self.version_update_button.setMinimumSize(QSize(0, 0))
+        self.version_update_button.setBaseSize(QSize(0, 203))
+        self.check_update_button = QPushButton(self.Button_Display_Frame)
+        self.check_update_button.setObjectName(u"check_update_button")
+        self.check_update_button.setGeometry(QRect(580, 0, 111, 31))
+        sizePolicy1.setHeightForWidth(self.check_update_button.sizePolicy().hasHeightForWidth())
+        self.check_update_button.setSizePolicy(sizePolicy1)
+        self.check_update_button.setMinimumSize(QSize(0, 0))
+        self.check_update_button.setBaseSize(QSize(0, 203))
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -227,8 +241,8 @@ class Ui_MainWindow(object):
 
         self.stackedWidget.setCurrentIndex(3)
 
-        QMetaObject.connectSlotsByName(MainWindow)
 
+        QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -242,7 +256,9 @@ class Ui_MainWindow(object):
         self.function_title.setText(QCoreApplication.translate("MainWindow", u"\u8bf4\u660e", None))
         self.function_describe.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.LogTextArea.setPlainText("")
-        self.auto_start_checkbox.setText(
-            QCoreApplication.translate("MainWindow", u"\u662f\u5426\u5f00\u673a\u81ea\u542f", None))
+        self.auto_start_checkbox.setText(QCoreApplication.translate("MainWindow", u"\u662f\u5426\u5f00\u673a\u81ea\u542f", None))
         self.version_label.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
+        self.version_update_button.setText(QCoreApplication.translate("MainWindow", u"\u68c0\u67e5\u5347\u7ea7", None))
+        self.check_update_button.setText(QCoreApplication.translate("MainWindow", u"\u68c0\u67e5\u5347\u7ea7", None))
     # retranslateUi
+

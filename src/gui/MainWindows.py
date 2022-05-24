@@ -1,3 +1,5 @@
+import threading
+
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel, QWidget
@@ -9,6 +11,7 @@ import logging
 import sys, os
 
 from util import AppSetting, AutomaticStartup
+from util.AutoUpdate import AutoUpdate
 from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
 from gui.FunctionItem import FunctionItem
@@ -55,6 +58,35 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.setting_button.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(3)))
         # 设置版本label
         self.version_label.setText(AppSetting.APP_VERSION)
+        # 设置自动更新
+        auto_update = AutoUpdate()
+
+        def checkUpdate():
+            if auto_update.checkForUpdate():
+                button_text = "立即升级{}".format(auto_update.release_version)
+                self.version_update_button.setText(button_text)
+                self.version_update_button.setVisible(True)
+                self.check_update_button.setVisible(False)
+            else:
+                self.check_update_button.setEnabled(False)
+                self.check_update_button.setText("已为最新版本")
+
+        def updateApp():
+            button_text = "升级{}中...".format(auto_update.release_version)
+            self.version_update_button.setText(button_text)
+            self.version_update_button.setEnabled(False)
+            auto_update.updateApp()
+            self.version_update_button.setEnabled(True)
+            self.version_update_button.setVisible(False)
+            self.check_update_button.setVisible(True)
+
+        def runUpdateApp():
+            threading.Thread(target=updateApp).start()
+
+        self.version_update_button.setVisible(False)
+        self.check_update_button.clicked.connect(checkUpdate)
+        self.version_update_button.clicked.connect(runUpdateApp)
+
         # 设置开机自启功能
         if self.db.get_str_by_key(AutomaticStartup.AUTO_RUN_DB_KEY) == str(True):
             self.auto_start_checkbox.setChecked(True)

@@ -4,11 +4,10 @@ import os.path
 import shutil
 import sys
 import urllib.request
-import zipfile
-
-from PySide6.QtWidgets import QApplication
 
 from util import AppSetting
+
+from util.RunBat import runBat
 
 RELEASE_LATEST_API_URL = "https://api.github.com/repos/JhihJian/Jhih_Ai_Assistant/releases/latest"
 import urllib.request
@@ -21,40 +20,29 @@ def getFileNameFromUrl(url):
 
 
 cmd_file_content = """
-@ECHO OFF
 
-:LOOP
-tasklist | find /i "Guyu" >nul 2>&1
-IF ERRORLEVEL 1 (
-  GOTO CONTINUE
-) ELSE (
-  ECHO Guyu is still running
-  Timeout /T 5 /Nobreak
-  GOTO LOOP
-)
+waitfor SomethingThatIsNeverHappening /t 3 >NUL
 
-:CONTINUE
-
-
-
-powershell Expand-Archive guyu-v*.*.*-windows-amd64.zip -DestinationPath .
+powershell Expand-Archive guyu-v*.*.*-windows-amd64.zip -DestinationPath . 
 
 move /Y dist\* .
 
 rmdir dist
 
-start Guyu.exe
+start %~dp0Guyu.exe
 
+(goto) 2>nul & del "%~f0"
 
-
+pause
 """
 
-
-# (goto) 2>nul & del "%~f0"
 
 def downloadFileFromUrl(download_url, store_dir):
     file_name = getFileNameFromUrl(download_url)
     file_path = os.path.join(store_dir, file_name)
+    # 如果文件存在就直接跳过下载
+    if os.path.isfile(file_path):
+        return file_path
     # TODO 改为使用配置
     # 使用代理
     proxy_support = urllib.request.ProxyHandler({'http': 'localhost:10809',
@@ -93,20 +81,24 @@ class AutoUpdate:
         except Exception as e:
             self.logger.error("check for update failed:{}".format(e))
 
-    def updateApp(self):
+    # app_quit_hook 退出app的函数
+    def updateApp(self, quit_app_hook):
         # 下载安装包
         store_dir = os.path.dirname(sys.executable)
         self.logger.info("begin download release file...")
         release_file_path = downloadFileFromUrl(self.download_url, store_dir)
         self.logger.info("download {} release in {}".format(self.release_version, release_file_path))
-
         # 运行bat
         bat_file_path = os.path.join(os.path.dirname(sys.executable), "update.bat")
         with open(bat_file_path, 'w') as f:
             f.writelines(cmd_file_content)
-        os.system(bat_file_path)
+
+        p = runBat(bat_file_path)
+        self.logger.info("run update bat pid:{}".format(p.pid))
+        self.logger.info("退出程序...")
         # 退出程序
-        QApplication.quit()
+        quit_app_hook()
+        os._exit(0)
 
     def __getDownloadUrl__(self, result):
         assets = result["assets"]

@@ -1,7 +1,7 @@
 import threading
 
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtGui import QIcon, QAction, QCloseEvent
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel, QWidget
 
 import keyboard
@@ -16,6 +16,7 @@ from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
 from gui.FunctionItem import FunctionItem
 from gui.Ui_MainWindows import Ui_MainWindow
+from concurrent.futures import ThreadPoolExecutor
 
 
 # try:
@@ -41,15 +42,21 @@ class QTextEditLogger(logging.Handler):
 
 class MainWindow(Ui_MainWindow, QMainWindow):
 
-    def __init__(self):
+    def __init__(self, quit_app_hook):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.setWindowTitle(AppSetting.APP_NAME)
-        self.db = DbHelper()
         self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
-
         # 设置日志
         self.logger_config(self.LogTextArea)
+        self.logger.info("init MainWindow")
+
+        self.quit_app_hook = quit_app_hook
+        # 设置线程池
+        executor = ThreadPoolExecutor(max_workers=10)
+
+        # 设置数据库
+        self.db = DbHelper()
 
         # 设置切换页面按钮
         self.pushButton.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(0)))
@@ -71,21 +78,23 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 self.check_update_button.setEnabled(False)
                 self.check_update_button.setText("已为最新版本")
 
+        def quit_app():
+            closing = QCloseEvent()
+            self.closeEvent(closing)
+            self.quit_app_hook()
+
         def updateApp():
             button_text = "升级{}中...".format(auto_update.release_version)
             self.version_update_button.setText(button_text)
             self.version_update_button.setEnabled(False)
-            auto_update.updateApp()
+            auto_update.updateApp(quit_app)
             self.version_update_button.setEnabled(True)
             self.version_update_button.setVisible(False)
             self.check_update_button.setVisible(True)
 
-        def runUpdateApp():
-            threading.Thread(target=updateApp).start()
-
         self.version_update_button.setVisible(False)
         self.check_update_button.clicked.connect(checkUpdate)
-        self.version_update_button.clicked.connect(runUpdateApp)
+        self.version_update_button.clicked.connect(updateApp)
 
         # 设置开机自启功能
         if self.db.get_str_by_key(AutomaticStartup.AUTO_RUN_DB_KEY) == str(True):

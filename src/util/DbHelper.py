@@ -1,8 +1,11 @@
+import logging
 import sys
 
 import plyvel
 import os
 from datetime import date
+
+from util import AppSetting
 
 ZZ_SCORE = "zz_score"
 JJ_SCORE = "jj_score"
@@ -17,8 +20,9 @@ class DbHelper:
     def __init__(self):
         if not hasattr(DbHelper, "_first_init"):
             # 用basedir 报错，无法创建db
-
-            self.db = plyvel.DB(os.path.join(os.path.dirname(sys.executable), DB_NAME), create_if_missing=True)
+            db_path = os.path.join(os.path.dirname(sys.executable), DB_NAME)
+            logging.getLogger(AppSetting.APP_LOG_NAME).info("open db on path:{}".format(db_path))
+            self.db = plyvel.DB(db_path, create_if_missing=True)
             DbHelper._first_init = True
 
     def __new__(cls):

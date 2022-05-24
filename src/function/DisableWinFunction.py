@@ -15,8 +15,8 @@ class DisableWinFunction(BaseFunction):
     function_name = "DisableWinFunction"
     wait_time = 150 * 1000  # 在1000ms 内连按两次ctrl 屏蔽之
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, executor):
+        super().__init__(executor)
         self.m_process = None
         self.check_process = None
         self.on_playing_lol = False
@@ -38,14 +38,15 @@ class DisableWinFunction(BaseFunction):
         self.function_status = FunctionStatus.RUNNING
 
     def quit(self):
-        if self.m_process.is_alive():
-            # self.m_process.terminate()
-            self.listener.stop()
-            self.logger.info("")
-        if self.check_process.is_alive():
-            self.check_process.terminate()
+        try:
+            if self.m_process.is_alive():
+                # self.m_process.terminate()
+                self.listener.stop()
+            if self.check_process.is_alive():
+                self.check_process.terminate()
+        except Exception as e:
+            self.logger.error("quit disable win function failed:{}".format(e))
         self.function_status = FunctionStatus.STOP
-        pass
 
     def __checkGamingStatus__(self):
         q = QueryProcess()

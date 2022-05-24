@@ -13,8 +13,9 @@ class BaseFunction:
     function_name = "BaseFunction"
     function_status = FunctionStatus.STOP
 
-    def __init__(self):
+    def __init__(self, executor):
         self.logger = logging.getLogger("MainWindow")
+        self.executor = executor
 
     def register(self):
         pass

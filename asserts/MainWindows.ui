@@ -419,6 +419,9 @@
      </property>
     </widget>
     <widget class="QPushButton" name="check_update_button">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>580</x>
@@ -447,6 +450,9 @@
      </property>
      <property name="text">
       <string>检查升级</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>

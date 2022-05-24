@@ -1,5 +1,26 @@
 # Jhih_Ai_Assistant
 
+使用qt界面，再使用multiprocessing 会导致新创建进程，再次作MainWindows 的init操作 会出现多个窗口，不停的创建
+
+解决方法，在main下调用`multiprocessing.freeze_support()`
+
+在qt应用中，每个被创建的进程都应该有个窗口，所以会默认提供窗口的初始化
+
+每个 kivy 应用程序都有自己的窗口，您正在启动另一个应用程序。如果您不想要窗口，只需将其设为纯 Python（不是 kivy 应用程序）？请注意，多处理在 iOS 中不可用，
+
+当您“创建线程”时，您不会创建线程，而是启动第二个 python 解释器，该解释器首先使用一些管道、套接字或共享内存魔法连接。因为 GIL 你没有更好的方法在 python 中完全加载
+cpu，所以唯一的修复方法是检查线程并通过创建第二个窗口。
+
+如果您在 Windows 上，多处理将启动导入主模块的新进程。确保通过将 GUI 创建代码放在下面来保护它if __name__ == '__main__':
+
+更好的是，为了避免在子进程中不必要地导入 PyQt 的开销，创建一个简单的新主模块，如下所示：
+
+```
+if __name__ == '__main__':
+    import old_main_module
+    old_main_module.main()
+```
+
 TODO
 
 - Function 启动、退出按钮假如中间状态，不可点击
@@ -82,6 +103,43 @@ req.set_proxy(proxy_host, 'http')
 
 response = urlrequest.urlopen(req)
 print(response.read().decode('utf8'))
+```
+
+自动更新时，调用QApplication.quit() 退出进程,好像会导致 调用MainWindow.__init__()方法
+
+sys.exit() 在线程内调用，只会退出线程
+
+线程中调用process 启动进程会报错 `AttributeError: Can't get attribute 'f' on <module '__main__' (built-in)>`
+
+原因 多进程执行的函数在某一个函数内部，如果是，那么就会报上述错误。解决办法是把那个函数放到这个函数外面
+
+正确的qt进程 退出方法 closing = QCloseEvent()
+window.closeEvent(closing)
+在方法内关闭线程
+
+app.shutdown()
+
+```
+import os
+import threading
+from multiprocessing import Process
+
+
+def f():
+    os.system('{}'.format("sleeper.bat"))
+
+
+def runProcess():
+    p = Process(target=f)
+    p.start()
+
+
+if __name__ == '__main__':
+    t = threading.Thread(target=runProcess)
+    print("thread ready")
+    t.start()
+    print("main finish")
+
 ```
 
 ----------------------

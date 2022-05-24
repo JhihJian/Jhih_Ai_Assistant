@@ -45,10 +45,12 @@ rmdir dist
 
 start Guyu.exe
 
-(goto) 2>nul & del "%~f0"
+
 
 """
 
+
+# (goto) 2>nul & del "%~f0"
 
 def downloadFileFromUrl(download_url, store_dir):
     file_name = getFileNameFromUrl(download_url)

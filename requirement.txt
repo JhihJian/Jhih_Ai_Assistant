@@ -6,3 +6,4 @@ PySide6
 psutil
 opencv-python
 plyvel-win32
+pynput

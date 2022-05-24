@@ -89,7 +89,15 @@ print(response.read().decode('utf8'))
 ## 发版本
 
 1. 修改 RELEASE.md
-2. 创建Tag `git push --delete origin main`
+2. 创建Tag `git tag v1.0.0` 并提交 `git push origin --tags`
+
+注：
+
+删除tag
+
+本地 `git tag -d v1.0.0`
+
+远程 `git push origin tag -d v1.0.0`
 
 ----------------------
 1.0.0版本包括以下内容

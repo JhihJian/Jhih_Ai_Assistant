@@ -8,16 +8,13 @@ import logging
 
 import sys, os
 
-from util import AutomaticStartup, AppSetting
+from util import AppSetting, AutomaticStartup
 from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
-from gui import Ui_MainWindows
 from gui.FunctionItem import FunctionItem
-from gui.Ui_FuntionItem import Ui_FunctionItem
 from gui.Ui_MainWindows import Ui_MainWindow
 
 
-# basedir = os.path.dirname(__file__)
 # try:
 #     from ctypes import windll  # Only exists on Windows.
 #
@@ -56,7 +53,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.function_button.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(1)))
         self.log_button.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(2)))
         self.setting_button.clicked.connect((lambda: self.stackedWidget.setCurrentIndex(3)))
-
+        # 设置版本label
+        self.version_label.setText(AppSetting.APP_VERSION)
         # 设置开机自启功能
         if self.db.get_str_by_key(AutomaticStartup.AUTO_RUN_DB_KEY) == str(True):
             self.auto_start_checkbox.setChecked(True)
@@ -134,14 +132,3 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.disable_win_function.quit()
         del self.db
         self.logger.info("close disable_win_function ...")
-
-
-if __name__ == '__main__':
-    app = QApplication([])
-    app.setApplicationName(AppSetting.APP_NAME)
-    app.setApplicationVersion(AppSetting.APP_VERSION)
-    window = MainWindow()
-    window.show()
-    app_name = QApplication.applicationName()
-    ret = app.exec()
-    sys.exit(ret)

@@ -155,6 +155,8 @@ Python 版本 3.8.10
 
 import resources_rc 改为 import gui.resources_rc
 
+pyside6-uic 增加参数 --from-imports
+
 遇到问题，设置注册表自动启动后，无法应用无法随windows启动，报错 plyvel._plyvel.Error: b'NotFound: guyu-db/LOCK:
 
 创建DB时使用的是相对路径，所以出错 plyvel.DB("guyu-db")
@@ -164,9 +166,8 @@ import resources_rc 改为 import gui.resources_rc
 
 ### 编译
 
-qt ui file to python file
-
-`pyside6-uic asserts/MainWindows.ui -o src/gui/Ui_MainWindows.py`
+qt ui file to python file --import- from=gui
+`pyside6-uic --from-imports asserts/MainWindows.ui -o src/gui/Ui_MainWindows.py`
 
 qt resource file to python file，注意，这个名字my_r_rc 要和ui py导入中的相同
 

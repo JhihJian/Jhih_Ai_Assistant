@@ -1,5 +1,11 @@
 # Jhih_Ai_Assistant
 
+TODO
+
+- Function 启动、退出按钮假如中间状态，不可点击
+- 界面显示版本号
+- version.ini中配置版本号
+
 ----------------------
 Git push 报错
 
@@ -43,10 +49,40 @@ fatal: refusing to merge unrelated histories
 
 联系GitHub 支持，要求他们删除缓存的视图和对 GitHub 上拉取请求中敏感数据的引用。请提供存储库的名称和/或您需要删除的提交的链接。
 
+下载release过程中遇到问题
+`urllib.request.urlretrieve(download_url, file_path)`
+报错
+`TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。`
+
+使用代理 写法一
+
+```python
+import urllib
+
+proxy_support = urllib.request.ProxyHandler({'http': 'localhost:10809',
+                                             'https': 'localhost:10809'})
+opener = urllib.request.build_opener(proxy_support)
+urllib.request.install_opener(opener)
+urllib.request.urlopen("http://www.google.com")
 
 
 
+```
 
+写法二
+
+```python
+from urllib import request as urlrequest
+
+proxy_host = 'localhost:10809'  # host and port of your proxy
+url = 'http://www.httpbin.org/ip'
+
+req = urlrequest.Request(url)
+req.set_proxy(proxy_host, 'http')
+
+response = urlrequest.urlopen(req)
+print(response.read().decode('utf8'))
+```
 
 ----------------------
 
@@ -77,9 +113,6 @@ guyu-1.0.0-windows-amd64.zip
 
 Python 版本 3.8.10
 
-TODO
-
-- Function 启动、退出按钮假如中间状态，不可点击
 
 -------------------------
 功能管理

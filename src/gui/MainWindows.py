@@ -8,7 +8,7 @@ import logging
 
 import sys, os
 
-from util import AutomaticStartup
+from util import AutomaticStartup, AppSetting
 from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
 from gui import Ui_MainWindows
@@ -16,15 +16,15 @@ from gui.FunctionItem import FunctionItem
 from gui.Ui_FuntionItem import Ui_FunctionItem
 from gui.Ui_MainWindows import Ui_MainWindow
 
-basedir = os.path.dirname(__file__)
 
-try:
-    from ctypes import windll  # Only exists on Windows.
-
-    myappid = 'jhih.guyu.1.0.0'
-    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-except ImportError:
-    pass
+# basedir = os.path.dirname(__file__)
+# try:
+#     from ctypes import windll  # Only exists on Windows.
+#
+#     myappid = 'jhih.guyu.1.0.0'
+#     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+# except ImportError:
+#     pass
 
 
 class QTextEditLogger(logging.Handler):
@@ -44,9 +44,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("Guyu Assistant")
+        self.setWindowTitle(AppSetting.APP_NAME)
         self.db = DbHelper()
-        self.logger = logging.getLogger("MainWindow")
+        self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
 
         # 设置日志
         self.logger_config(self.LogTextArea)
@@ -112,7 +112,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         self.logger.setLevel(logging.DEBUG)
         # 文件日志输出
-        log_file_path = os.path.join(os.path.dirname(sys.executable), 'MainWindow.log')
+        log_file_path = os.path.join(os.path.dirname(sys.executable), AppSetting.APP_LOG_NAME + '.log')
         print(log_file_path)
         fh = logging.FileHandler(log_file_path)
         fh.setFormatter(log_format)
@@ -138,8 +138,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-    app.setApplicationName("Guyu-Assistant")
-    app.setApplicationVersion("1.0.0")
+    app.setApplicationName(AppSetting.APP_NAME)
+    app.setApplicationVersion(AppSetting.APP_VERSION)
     window = MainWindow()
     window.show()
     app_name = QApplication.applicationName()

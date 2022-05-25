@@ -1,5 +1,11 @@
 # Jhih_Ai_Assistant
 
+pynput 以async模式使用
+
+pynput 示例包含使用 pynput 的两种不同变体，您需要从中选择后者，因为它更容易连接到 asyncio。键盘侦听器将允许程序继续执行 asyncio 事件循环，同时从单独的线程调用回调。
+
+
+-----------------------------------
 使用qt界面，再使用multiprocessing 会导致新创建进程，再次作MainWindows 的init操作 会出现多个窗口，不停的创建
 
 解决方法，在main下调用`multiprocessing.freeze_support()`

@@ -40,7 +40,7 @@ def isNewDay(db):
     return is_new_day
 
 
-class EveryDayFuntion(BaseFunction):
+class EveryDayFunction(BaseFunction):
 
     def __init__(self, function_controller, run_functions):
         super().__init__(function_controller)

@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow,
 
 import logging
 
-from function.EveryDayFunction import EveryDayFuntion, isNewDay, libraryPageIsOnline
+from function.EveryDayFunction import EveryDayFunction, isNewDay, libraryPageIsOnline
 from function.FunctionController import FunctionController
 from function.QQSocket import MonitorQQFunction
 from util import AppSetting, AutomaticStartup, LoggerConfig
@@ -187,7 +187,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # #每日任务
         if isNewDay(self.db):
             diary_functions = [libraryPageIsOnline]
-            ed = EveryDayFuntion(self.function_controller, diary_functions)
+            ed = EveryDayFunction(self.function_controller, diary_functions)
             ed.start()
         self.timer.start()
 

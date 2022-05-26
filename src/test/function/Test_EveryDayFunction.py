@@ -43,7 +43,7 @@ class Test_EveryDayFunction(unittest.TestCase):
         fc = FunctionController()
         fc.start()
 
-        ed = EveryDayFuntion(fc, [doJob])
+        ed = EveryDayFunction(fc, [doJob])
         ed.start()
 
         fc.stop()
@@ -62,7 +62,7 @@ class Test_EveryDayFunction(unittest.TestCase):
         fc = FunctionController()
         fc.start()
 
-        ed = EveryDayFuntion(fc, [doJob])
+        ed = EveryDayFunction(fc, [doJob])
         ed.start()
         while ed.function_status != FunctionStatus.STOP:
             time.sleep(0.5)

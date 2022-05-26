@@ -13,7 +13,6 @@ from util import AppSetting, AutomaticStartup, LoggerConfig
 from util.AutoUpdate import AutoUpdate
 from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
-from gui.FunctionItem import FunctionItem
 from gui.Ui_MainWindows import Ui_MainWindow
 from concurrent.futures import ThreadPoolExecutor
 
@@ -127,68 +126,111 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # 添加function 列表
 
         # # 禁用Win
-        disable_win_function_item = FunctionItem()
-        disable_win_function_item.function_button.setText("禁用Win")
-        self.functionListLayout.addWidget(disable_win_function_item)
+        disable_win_default_run = "disable_win_default_run"
         self.disable_win_function = DisableWinFunction(self.function_controller)
+        self.disable_win_startup_check.click()
 
-        if self.db.get_str_by_key("DisableWinFunction_ISOPEN") == "FALSE":
-            # 如果默认为关闭状态
-            pass
+        if self.db.get_str_by_key(disable_win_default_run) == str(False):
+            self.disable_win_startup_check.setChecked(False)
         else:
+            self.disable_win_startup_check.setChecked(True)
             self.disable_win_function.start()
 
-        disable_win_function_item.start_button.clicked.connect(self.disable_win_function.start)
-        disable_win_function_item.quit_button.clicked.connect(self.disable_win_function.quit)
+        self.disable_win_startup_check.stateChanged.connect(
+            (lambda: self.db.store_str_by_key(disable_win_default_run,
+                                              str(True)) if self.disable_win_startup_check.isChecked() else self.db.store_str_by_key(
+                disable_win_default_run, str(False))))
+
+        self.disable_win_start_button.clicked.connect(self.disable_win_function.start)
+        self.disable_win_quit_button.clicked.connect(self.disable_win_function.quit)
+        self.disable_win_button.clicked.connect(lambda: self.function_widget.setCurrentIndex(1))
 
         def update_disable_win_function():
             if self.disable_win_function.isOnline():
-                disable_win_function_item.offline_icon.setVisible(False)
-                disable_win_function_item.start_button.setVisible(False)
-                disable_win_function_item.online_icon.setVisible(True)
-                disable_win_function_item.quit_button.setVisible(True)
+                self.disable_win_offline_icon.setVisible(False)
+                self.disable_win_start_button.setVisible(False)
+                self.disable_win_online_icon.setVisible(True)
+                self.disable_win_quit_button.setVisible(True)
             else:
-                disable_win_function_item.online_icon.setVisible(False)
-                disable_win_function_item.quit_button.setVisible(False)
-                disable_win_function_item.offline_icon.setVisible(True)
-                disable_win_function_item.start_button.setVisible(True)
+                self.disable_win_online_icon.setVisible(False)
+                self.disable_win_quit_button.setVisible(False)
+                self.disable_win_offline_icon.setVisible(True)
+                self.disable_win_start_button.setVisible(True)
 
         interval_functions.append(update_disable_win_function)
 
         # # QQ监听
-        qq_monitor_function_item = FunctionItem()
-        qq_monitor_function_item.function_button.setText("QQ监听")
-        self.functionListLayout.addWidget(qq_monitor_function_item)
-        self.qq_monitor_function = MonitorQQFunction(self.function_controller)
-
-        if self.db.get_str_by_key("MonitorQQFunction_ISOPEN") == "FALSE":
-            # 如果默认为关闭状态
-            pass
+        qq_monitor_address_key = "qq_monitor_address_key"
+        qq_monitor_address = self.db.get_str_by_key(qq_monitor_address_key)
+        if qq_monitor_address:
+            self.qq_monitor_address_edit.setText(qq_monitor_address)
         else:
+            qq_monitor_address = self.qq_monitor_address_edit.placeholderText()
+
+        self.qq_monitor_address_edit.editingFinished.connect(
+            lambda: self.db.store_str_by_key(qq_monitor_address_key, self.qq_monitor_address_edit.text()))
+
+        self.qq_monitor_function = MonitorQQFunction(self.function_controller, qq_monitor_address)
+        monitor_qq_default_run = "monitor_qq_default_run"
+        self.qq_monitor_start_button.clicked.connect(self.qq_monitor_function.start)
+        self.qq_monitor_quit_button.clicked.connect(self.qq_monitor_function.quit)
+        self.qq_monitor_button.clicked.connect(lambda: self.function_widget.setCurrentIndex(0))
+
+        if self.db.get_str_by_key(monitor_qq_default_run) == str(False):
+            self.qq_monitor_startup_check.setChecked(False)
+        else:
+            self.qq_monitor_startup_check.setChecked(True)
             self.qq_monitor_function.start()
 
-        qq_monitor_function_item.start_button.clicked.connect(self.qq_monitor_function.start)
-        qq_monitor_function_item.quit_button.clicked.connect(self.qq_monitor_function.quit)
+        self.qq_monitor_startup_check.stateChanged.connect(
+            (lambda: self.db.store_str_by_key(monitor_qq_default_run,
+                                              str(True)) if self.qq_monitor_startup_check.isChecked() else self.db.store_str_by_key(
+                monitor_qq_default_run, str(False))))
 
         def update_qq_monitor_function():
             if self.qq_monitor_function.isOnline():
-                qq_monitor_function_item.offline_icon.setVisible(False)
-                qq_monitor_function_item.start_button.setVisible(False)
-                qq_monitor_function_item.online_icon.setVisible(True)
-                qq_monitor_function_item.quit_button.setVisible(True)
+                self.qq_monitor_offline_icon.setVisible(False)
+                self.qq_monitor_start_button.setVisible(False)
+                self.qq_monitor_online_icon.setVisible(True)
+                self.qq_monitor_quit_button.setVisible(True)
             else:
-                qq_monitor_function_item.online_icon.setVisible(False)
-                qq_monitor_function_item.quit_button.setVisible(False)
-                qq_monitor_function_item.offline_icon.setVisible(True)
-                qq_monitor_function_item.start_button.setVisible(True)
+                self.qq_monitor_online_icon.setVisible(False)
+                self.qq_monitor_quit_button.setVisible(False)
+                self.qq_monitor_offline_icon.setVisible(True)
+                self.qq_monitor_start_button.setVisible(True)
 
         interval_functions.append(update_qq_monitor_function)
 
         # #每日任务
-        if isNewDay(self.db):
-            diary_functions = [libraryPageIsOnline]
-            ed = EveryDayFunction(self.function_controller, diary_functions)
-            ed.start()
+        self.every_day_button.clicked.connect(lambda: self.function_widget.setCurrentIndex(2))
+        diary_check_default_run = "diary_check_default_run"
+        blog_check_default_run = "blog_check_default_run"
+        if self.db.get_str_by_key(blog_check_default_run) == str(False):
+            self.blog_online_startup_check.setChecked(False)
+            run_blog_check = False
+        else:
+            self.blog_online_startup_check.setChecked(True)
+            run_blog_check = True
+
+        if self.db.get_str_by_key(diary_check_default_run) == str(False):
+            self.every_day_startup_check.setChecked(False)
+        else:
+            self.every_day_startup_check.setChecked(True)
+            if isNewDay(self.db):
+                diary_functions = []
+                if run_blog_check:
+                    diary_functions.append(libraryPageIsOnline)
+                ed = EveryDayFunction(self.function_controller, diary_functions)
+                ed.start()
+
+        self.every_day_startup_check.stateChanged.connect(
+            (lambda: self.db.store_str_by_key(diary_check_default_run,
+                                              str(True)) if self.every_day_startup_check.isChecked() else self.db.store_str_by_key(
+                diary_check_default_run, str(False))))
+        self.blog_online_startup_check.stateChanged.connect(
+            (lambda: self.db.store_str_by_key(blog_check_default_run,
+                                              str(True)) if self.blog_online_startup_check.isChecked() else self.db.store_str_by_key(
+                blog_check_default_run, str(False))))
         self.timer.start()
 
     # Quit App Event

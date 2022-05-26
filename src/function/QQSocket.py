@@ -104,9 +104,11 @@ class MonitorQQFunction(BaseFunction):
     # async method on other threading loop run
     # 如何将异步函数传递给 Python 中的线程目标？
 
-    def __init__(self, function_controller):
+    def __init__(self, function_controller, monitor_address):
         super().__init__(function_controller)
         self.websocket = None
+        self.monitor_address = monitor_address
+        self.logger.info(f"init qq monitor address:{self.monitor_address}")
 
     def start(self):
         self.logger.info("监控QQ功能启动中...")
@@ -148,7 +150,7 @@ class MonitorQQFunction(BaseFunction):
     async def monitor_message(self):
         try:
             logger = self.logger
-            async with websockets.connect("ws://localhost:6700/", logger=logger) as self.websocket:
+            async with websockets.connect(self.monitor_address, logger=logger) as self.websocket:
                 self.function_status = FunctionStatus.RUNNING
                 self.logger.info("监控QQ功能启动完成")
                 while True:
@@ -182,7 +184,7 @@ if __name__ == '__main__':
     fc = FunctionController()
     fc.start()
     time.sleep(1)
-    qq = MonitorQQFunction(fc)
+    qq = MonitorQQFunction(fc, "ws://localhost:6700/api")
     qq.start()
     qq.send_message_to_JJ("测试")
     time.sleep(3)

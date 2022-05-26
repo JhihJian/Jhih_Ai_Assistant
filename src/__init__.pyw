@@ -21,6 +21,7 @@ def quit_app():
 if __name__ == '__main__':
     multiprocessing.freeze_support()
     app = QApplication([])
+    app.setStyle('Fusion')
     app.setApplicationName(AppSetting.APP_NAME)
     app.setApplicationVersion(AppSetting.APP_VERSION)
     window = MainWindow(quit_app)

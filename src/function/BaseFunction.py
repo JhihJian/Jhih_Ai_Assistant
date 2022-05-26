@@ -1,6 +1,8 @@
 import logging
 from enum import Enum
 
+from util import AppSetting
+
 
 class FunctionStatus(Enum):
     RUNNING = "RUNNING"
@@ -13,9 +15,9 @@ class BaseFunction:
     function_name = "BaseFunction"
     function_status = FunctionStatus.STOP
 
-    def __init__(self, executor):
-        self.logger = logging.getLogger("MainWindow")
-        self.executor = executor
+    def __init__(self, function_controller):
+        self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
+        self.function_controller = function_controller
 
     def register(self):
         pass

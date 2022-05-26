@@ -4,13 +4,11 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QIcon, QAction, QCloseEvent
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow, QLabel, QWidget
 
-import keyboard
-
 import logging
 
-import sys, os
-
-from util import AppSetting, AutomaticStartup
+from function.FunctionController import FunctionController
+from function.QQSocket import MonitorQQFunction
+from util import AppSetting, AutomaticStartup, LoggerConfig
 from util.AutoUpdate import AutoUpdate
 from util.DbHelper import DbHelper
 from function.DisableWinFunction import DisableWinFunction
@@ -46,9 +44,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.setWindowTitle(AppSetting.APP_NAME)
-        self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
         # 设置日志
-        self.logger_config(self.LogTextArea)
+        log_text_box = QTextEditLogger(self.LogTextArea)
+        self.logger = LoggerConfig.logger_config(log_text_box)
         self.logger.info("init MainWindow")
 
         self.quit_app_hook = quit_app_hook
@@ -112,11 +110,26 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         self.auto_start_checkbox.stateChanged.connect(auto_run_state_changed)
 
+        # 函数控制器
+        self.function_controller = FunctionController()
+        self.function_controller.start()
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        interval_functions = []
+
+        def interval_updates():
+            for function in interval_functions:
+                function()
+
+        self.timer.timeout.connect(interval_updates)
+
         # 添加function 列表
+
+        # # 禁用Win
         disable_win_function_item = FunctionItem()
         disable_win_function_item.function_button.setText("禁用Win")
         self.functionListLayout.addWidget(disable_win_function_item)
-        self.disable_win_function = DisableWinFunction()
+        self.disable_win_function = DisableWinFunction(self.function_controller)
 
         if self.db.get_str_by_key("DisableWinFunction_ISOPEN") == "FALSE":
             # 如果默认为关闭状态
@@ -127,7 +140,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         disable_win_function_item.start_button.clicked.connect(self.disable_win_function.start)
         disable_win_function_item.quit_button.clicked.connect(self.disable_win_function.quit)
 
-        def update_online_icon():
+        def update_disable_win_function():
             if self.disable_win_function.isOnline():
                 disable_win_function_item.offline_icon.setVisible(False)
                 disable_win_function_item.start_button.setVisible(False)
@@ -139,37 +152,47 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 disable_win_function_item.offline_icon.setVisible(True)
                 disable_win_function_item.start_button.setVisible(True)
 
-        self.timer = QTimer()
-        self.timer.setInterval(1000)
-        self.timer.timeout.connect(update_online_icon)
+        interval_functions.append(update_disable_win_function)
+
+        # # QQ监听
+        qq_monitor_function_item = FunctionItem()
+        qq_monitor_function_item.function_button.setText("QQ监听")
+        self.functionListLayout.addWidget(qq_monitor_function_item)
+        self.qq_monitor_function = MonitorQQFunction(self.function_controller)
+
+        if self.db.get_str_by_key("MonitorQQFunction_ISOPEN") == "FALSE":
+            # 如果默认为关闭状态
+            pass
+        else:
+            self.qq_monitor_function.start()
+
+        qq_monitor_function_item.start_button.clicked.connect(self.qq_monitor_function.start)
+        qq_monitor_function_item.quit_button.clicked.connect(self.qq_monitor_function.quit)
+
+        def update_qq_monitor_function():
+            if self.qq_monitor_function.isOnline():
+                qq_monitor_function_item.offline_icon.setVisible(False)
+                qq_monitor_function_item.start_button.setVisible(False)
+                qq_monitor_function_item.online_icon.setVisible(True)
+                qq_monitor_function_item.quit_button.setVisible(True)
+            else:
+                qq_monitor_function_item.online_icon.setVisible(False)
+                qq_monitor_function_item.quit_button.setVisible(False)
+                qq_monitor_function_item.offline_icon.setVisible(True)
+                qq_monitor_function_item.start_button.setVisible(True)
+
+        interval_functions.append(update_qq_monitor_function)
+
         self.timer.start()
 
         # 功能1 qq监听
 
-    def logger_config(self, log_text_area):
-        # 日志基本配置
-        log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-        self.logger.setLevel(logging.DEBUG)
-        # 文件日志输出
-        log_file_path = os.path.join(os.path.dirname(sys.executable), AppSetting.APP_LOG_NAME + '.log')
-        print(log_file_path)
-        fh = logging.FileHandler(log_file_path)
-        fh.setFormatter(log_format)
-        self.logger.addHandler(fh)
-        # 界面日志输出
-        log_text_box = QTextEditLogger(log_text_area)
-        log_text_box.setFormatter(log_format)
-        log_text_box.setLevel(logging.INFO)
-        self.logger.addHandler(log_text_box)
-        # 控制台日志输出
-        ch = logging.StreamHandler()
-        ch.setFormatter(log_format)
-        ch.setLevel(logging.DEBUG)
-        self.logger.addHandler(ch)
-        self.logger.info('程序已启动')
-
     # Quit App Event
     def closeEvent(self, event):
         self.disable_win_function.quit()
+        self.qq_monitor_function.quit()
+
+        # 直接退出时 没报 connection is CLOSED，关闭任务时有
+        self.function_controller.stop()
         del self.db
         self.logger.info("close disable_win_function ...")

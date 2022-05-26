@@ -5,10 +5,13 @@ import json
 import logging
 import threading
 import time
+from datetime import datetime
 
 import websockets
 
 from function.BaseFunction import BaseFunction, FunctionStatus
+from function.FunctionController import FunctionController
+from util import LoggerConfig
 from util.DbHelper import DbHelper
 from util.QueryProcess import QueryProcess
 
@@ -27,33 +30,6 @@ SEND_MESSAGE_TEMPLATE = """
 
 def on_message(msg):
     print(msg)
-
-
-# {"font":0,"message":"sad","message_id":24727482,"message_type":"private","post_type":"message","raw_message":"sad","self_id":1935912438,"sender":{"age":0,"nickname":"Jhih","sex":"unknown","user_id":980858153},"sub_type":"friend","target_id":1935912438,"time":1652083856,"user_id":980858153}
-# {"interval":5000,"meta_event_type":"heartbeat","post_type":"meta_event","self_id":1935912438,"status":{"app_enabled":true,"app_good":true,"app_initialized":true,"good":true,"online":true,"plugins_good":null,"stat":{"PacketReceived":178,"PacketSent":163,"PacketLost":0,"MessageReceived":3,"MessageSent":5,"LastMessageTime":1652083856,"DisconnectTimes":0,"LostTimes":0}},"time":1652083858}
-async def monitor_message():
-    async with websockets.connect("ws://localhost:6700/", logger=logger) as websocket:
-        while True:
-            r_data = json.loads(await websocket.recv())
-            # 心跳测试
-            if "meta_event_type" in r_data and r_data["meta_event_type"] == "heartbeat":
-                continue
-            # 收到私信
-            elif "message_type" in r_data and r_data["message_type"] == "private":
-                try:
-                    sender_id = r_data["sender"]["user_id"]
-                    sender_nick_name = r_data["sender"]["nickname"]
-                    message = r_data["message"]
-                    logger.info("sender id:{} name:{} send message:{}".format(sender_id, sender_nick_name, message))
-                except Exception as e:
-                    logger.error("load json data failed exception:{} data:{}".format(e, r_data))
-
-                try:
-                    handle_message(websocket, sender_id, message)
-                except Exception as e:
-                    logger.error("send data failed exception:{}".format(e))
-            else:
-                logger.info(r_data)
 
 
 def handle_message(websocket, sender_id, message):
@@ -122,62 +98,88 @@ async def send_message_alone(target_id, message):
         print(result)
 
 
-def call_send_entry(target_id, message):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(send_message_alone(target_id, message))
-    loop.close()
-
-
 class MonitorQQFunction(BaseFunction):
     function_name = "MonitorQQFunction"
 
     # async method on other threading loop run
     # 如何将异步函数传递给 Python 中的线程目标？
 
-    def __init__(self):
-        super().__init__()
-        self.loop = None
+    def __init__(self, function_controller):
+        super().__init__(function_controller)
+        self.websocket = None
 
     def start(self):
+        self.logger.info("监控QQ功能启动中...")
         self.function_status = FunctionStatus.STARTING
-        self.loop = asyncio.new_event_loop()
-
-        def call_monitor_entry(loop):
-            asyncio.set_event_loop(loop)
-            loop.create_task(monitor_message())
-            loop.run_forever()
-            loop.close()
-
-        _thread = threading.Thread(target=call_monitor_entry, args=[self.loop])
-        _thread.start()
-        self.function_status = FunctionStatus.RUNNING
-        pass
+        self.function_controller.append_async_task(self.monitor_message)
 
     def quit(self):
-        self.loop.stop()
-        while not self.loop.is_closed():
-            time.sleep(0.1)
+        self.logger.info("监控QQ功能退出中...")
+        if self.websocket:
+            # 直接调用 self.websocket.close()
+            # 报错 RuntimeWarning: coroutine 'WebSocketCommonProtocol.close' was never awaited
+            # 改为以下
+            self.function_controller.run_async_task_wait(self.websocket.close)
+
+        self.function_controller.stop_task(self.monitor_message)
+        # 这里调用结束了，不代表真的立刻STOP了
         self.function_status = FunctionStatus.STOP
-        pass
+        self.logger.info("监控QQ功能退出完成")
 
     def send_message_to_JJ(self, message):
-        _thread = threading.Thread(target=call_send_entry, args=[980858153, message])
-        _thread.start()
+        self.function_controller.append_async_task(send_message_alone, 980858153, message)
 
     def send_message_to_ZZ(self, message):
-        _thread = threading.Thread(target=call_send_entry, args=[1600074410, message])
-        _thread.start()
+        self.function_controller.append_async_task(send_message_alone, 1600074410, message)
 
     def send_message_to_all(self, message):
         self.send_message_to_JJ(message)
         self.send_message_to_ZZ(message)
 
+    # {"font":0,"message":"sad","message_id":24727482,"message_type":"private","post_type":"message","raw_message":"sad","self_id":1935912438,"sender":{"age":0,"nickname":"Jhih","sex":"unknown","user_id":980858153},"sub_type":"friend","target_id":1935912438,"time":1652083856,"user_id":980858153}
+    # {"interval":5000,"meta_event_type":"heartbeat","post_type":"meta_event","self_id":1935912438,"status":{"app_enabled":true,"app_good":true,"app_initialized":true,"good":true,"online":true,"plugins_good":null,"stat":{"PacketReceived":178,"PacketSent":163,"PacketLost":0,"MessageReceived":3,"MessageSent":5,"LastMessageTime":1652083856,"DisconnectTimes":0,"LostTimes":0}},"time":1652083858}
+    async def monitor_message(self):
+        try:
+            logger = self.logger
+            async with websockets.connect("ws://localhost:6700/", logger=logger) as self.websocket:
+                self.function_status = FunctionStatus.RUNNING
+                self.logger.info("监控QQ功能启动完成")
+                while True:
+                    r_data = json.loads(await self.websocket.recv())
+                    # 心跳测试
+                    if "meta_event_type" in r_data and r_data["meta_event_type"] == "heartbeat":
+                        continue
+                    # 收到私信
+                    elif "message_type" in r_data and r_data["message_type"] == "private":
+                        try:
+                            sender_id = r_data["sender"]["user_id"]
+                            sender_nick_name = r_data["sender"]["nickname"]
+                            message = r_data["message"]
+                            logger.info(
+                                "sender id:{} name:{} send message:{}".format(sender_id, sender_nick_name, message))
+                        except Exception as e:
+                            logger.error("load json data failed exception:{} data:{}".format(e, r_data))
+
+                        try:
+                            handle_message(self.websocket, sender_id, message)
+                        except Exception as e:
+                            logger.error("send data failed exception:{}".format(e))
+                    else:
+                        logger.info(r_data)
+        finally:
+            self.logger.info("quit monitor_message")
+
 
 if __name__ == '__main__':
-    qq = MonitorQQFunction()
+    logger = LoggerConfig.logger_config(None)
+    fc = FunctionController()
+    fc.start()
+    time.sleep(1)
+    qq = MonitorQQFunction(fc)
     qq.start()
     qq.send_message_to_JJ("测试")
     time.sleep(3)
     qq.quit()
-    print("主线程继续执行")
+    time.sleep(1)
+    fc.stop()
+    print("主线程结束")

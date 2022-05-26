@@ -16,6 +16,7 @@ class FunctionController(Thread):
         self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
         self.loop = None
         self.tasks_dict = {}
+        self.is_start_finish = False
 
     # 停止任务
     def stop_task(self, function_hook):
@@ -27,8 +28,17 @@ class FunctionController(Thread):
         # 为什么这里不要调用 run_until_complete 再退出呢？
         return True
 
+    # TODO 超时不等待
+    def waitStartFinish(self):
+        pre = datetime.now()
+        while not self.is_start_finish:
+            time.sleep(0.001)
+            # print("asdasd")
+        self.logger.info(f"wait start finish cost:{datetime.now() - pre}")
+
     # 运行异步任务
-    def run_async_task_wait(self, function_hook, *args):
+    def run_async_task_wait(self, function_hook, *args, timeout=15):
+        self.waitStartFinish()
         pre = datetime.now()
         task = asyncio.run_coroutine_threadsafe(function_hook(*args), self.loop)
         self.tasks_dict[function_hook] = task
@@ -42,13 +52,15 @@ class FunctionController(Thread):
 
         task.add_done_callback(_on_completion)
         # 阻塞进程等待完成
-        result = task.result(15)
+        result = task.result(timeout)
 
         self.logger.info(f"run async task {function_hook.__name__} wait {datetime.now() - pre}")
         return task
 
     # 运行异步任务
     def append_async_task(self, function_hook, *args):
+        self.waitStartFinish()
+
         task = asyncio.run_coroutine_threadsafe(function_hook(*args), self.loop)
         self.tasks_dict[function_hook] = task
 
@@ -65,6 +77,8 @@ class FunctionController(Thread):
         return task
 
     def append_sync_task(self, function_hook, *args):
+        self.waitStartFinish()
+
         self.logger.info(f"append sync task {function_hook.__name__} ")
         task = self.loop.run_in_executor(None, function_hook, *args)
         self.tasks_dict[function_hook] = task
@@ -76,6 +90,7 @@ class FunctionController(Thread):
         loop = self.loop
 
         asyncio.set_event_loop(loop)
+        self.is_start_finish = True
         try:
             # run loop:
             loop.run_forever()

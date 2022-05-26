@@ -12,16 +12,17 @@ JJ_SCORE = "jj_score"
 ADD_JJ_SCORE_REASONS = "add_jj_score_reasons"
 ADD_ZZ_SCORE_REASONS = "add_zz_score_reasons"
 
-DB_NAME = "guyu-db"
-
 
 # 辅助进行db操作，单例
 class DbHelper:
+    DB_NAME = "guyu-db"
+
     def __init__(self):
         if not hasattr(DbHelper, "_first_init"):
             # 用basedir 报错，无法创建db
-            db_path = os.path.join(os.path.dirname(sys.executable), DB_NAME)
-            logging.getLogger(AppSetting.APP_LOG_NAME).info("open db on path:{}".format(db_path))
+            db_path = os.path.join(os.path.dirname(sys.executable), self.DB_NAME)
+            self.logger = logging.getLogger(AppSetting.APP_LOG_NAME)
+            self.logger.info("open db on path:{}".format(db_path))
             self.db = plyvel.DB(db_path, create_if_missing=True)
             DbHelper._first_init = True
 
@@ -95,15 +96,17 @@ class DbHelper:
     def test_close(self):
         self.db.close()
 
-    @classmethod
-    def test_del_db(cls, db_name):
-        plyvel.destroy_db(db_name)
-
+    def test_del_db(self):
+        self.db.close()
+        db_path = os.path.join(os.path.dirname(sys.executable), self.DB_NAME)
+        plyvel.destroy_db(db_path)
+        delattr(DbHelper, "_first_init")
+        print(f"del db path:{db_path}")
 
 # 单元测试
-if __name__ == '__main__':
-    db = DbHelper()
-    db = DbHelper()
-    db.update_db_day()
-    print(db.get_db_day() == date.today())
-    del db
+# if __name__ == '__main__':
+#     db = DbHelper()
+#     db = DbHelper()
+#     db.update_db_day()
+#     print(db.get_db_day() == date.today())
+#     del db

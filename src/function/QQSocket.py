@@ -94,8 +94,8 @@ async def send_message_alone(target_id, message):
     async with websockets.connect("ws://localhost:6700/api") as websocket:
         print(json.dumps(data))
         await websocket.send(json.dumps(data))
-        result = await websocket.recv()
-        print(result)
+        # result = await websocket.recv()
+        # print(result)
 
 
 class MonitorQQFunction(BaseFunction):
@@ -135,6 +135,13 @@ class MonitorQQFunction(BaseFunction):
     def send_message_to_all(self, message):
         self.send_message_to_JJ(message)
         self.send_message_to_ZZ(message)
+
+    async def send_message(self, target_id, message):
+        sender_id = target_id
+        data = json.loads(SEND_MESSAGE_TEMPLATE)
+        data["params"]["user_id"] = sender_id
+        data["params"]["message"] = message
+        await self.websocket.send(json.dumps(data))
 
     # {"font":0,"message":"sad","message_id":24727482,"message_type":"private","post_type":"message","raw_message":"sad","self_id":1935912438,"sender":{"age":0,"nickname":"Jhih","sex":"unknown","user_id":980858153},"sub_type":"friend","target_id":1935912438,"time":1652083856,"user_id":980858153}
     # {"interval":5000,"meta_event_type":"heartbeat","post_type":"meta_event","self_id":1935912438,"status":{"app_enabled":true,"app_good":true,"app_initialized":true,"good":true,"online":true,"plugins_good":null,"stat":{"PacketReceived":178,"PacketSent":163,"PacketLost":0,"MessageReceived":3,"MessageSent":5,"LastMessageTime":1652083856,"DisconnectTimes":0,"LostTimes":0}},"time":1652083858}

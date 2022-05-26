@@ -6,9 +6,15 @@ import sys
 
 from util import AppSetting
 
+config_already = False
+
 
 def logger_config(log_text_box):
+    global config_already
     logger = logging.getLogger(AppSetting.APP_LOG_NAME)
+    if config_already:
+        logger.info("config log already ,call repeated")
+        return
     # 日志基本配置
     log_format = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     logger.setLevel(logging.DEBUG)
@@ -27,5 +33,6 @@ def logger_config(log_text_box):
     ch.setFormatter(log_format)
     ch.setLevel(logging.DEBUG)
     logger.addHandler(ch)
-    logger.info('程序已启动')
+    config_already = True
+    logger.info('日志配置完成')
     return logger

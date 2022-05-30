@@ -31,6 +31,8 @@ rmdir dist
 
 start %~dp0Guyu.exe
 
+del /f guyu-v*.*.*-windows-amd64.zip
+
 (goto) 2>nul & del "%~f0"
 
 pause

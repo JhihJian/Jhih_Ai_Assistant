@@ -21,7 +21,18 @@ def getFileNameFromUrl(url):
 
 cmd_file_content = """
 
-waitfor SomethingThatIsNeverHappening /t 3 >NUL
+
+:LOOP
+tasklist | find /i "Guyu" >nul 2>&1
+IF ERRORLEVEL 1 (
+  GOTO CONTINUE
+) ELSE (
+  ECHO Guyu is still running
+  Timeout /T 5 /Nobreak
+  GOTO LOOP
+)
+
+:CONTINUE
 
 powershell Expand-Archive guyu-v*.*.*-windows-amd64.zip -DestinationPath . 
 
@@ -67,6 +78,7 @@ def downloadFileFromUrl(download_url, store_dir):
 class AutoUpdate:
     def __init__(self):
         self.logger = logging.getLogger("MainWindow")
+        # self.function_controller = function_controller
 
     # 检查更新
     def checkForUpdate(self):

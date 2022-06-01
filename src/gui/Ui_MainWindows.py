@@ -9,19 +9,18 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon,
-                           QImage, QKeySequence, QLinearGradient, QPainter,
-                           QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-                               QLabel, QLayout, QLineEdit, QMainWindow,
-                               QPlainTextEdit, QPushButton, QSizePolicy, QSpacerItem,
-                               QStackedWidget, QStatusBar, QTextEdit, QToolBox,
-                               QVBoxLayout, QWidget)
-from gui import resources_rc
-
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QHBoxLayout, QLabel, QLayout, QLineEdit,
+    QMainWindow, QPlainTextEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QStackedWidget, QStatusBar, QTextEdit,
+    QToolBox, QVBoxLayout, QWidget)
+from  . import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -88,6 +87,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.setting_button)
 
+
         self.two_split.addWidget(self.Left_Component_Frame)
 
         self.Right_Display_Frame = QFrame(self.layoutWidget1)
@@ -147,52 +147,11 @@ class Ui_MainWindow(object):
         self.functionListLayout.setObjectName(u"functionListLayout")
         self.functionListLayout.setSizeConstraint(QLayout.SetMinAndMaxSize)
         self.functionListLayout.setContentsMargins(0, 0, 0, 0)
-        self.QQMonitorFrame = QFrame(self.verticalLayoutWidget)
-        self.QQMonitorFrame.setObjectName(u"QQMonitorFrame")
+        self.DisableWinFrame = QFrame(self.verticalLayoutWidget)
+        self.DisableWinFrame.setObjectName(u"DisableWinFrame")
         sizePolicy5 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.QQMonitorFrame.sizePolicy().hasHeightForWidth())
-        self.QQMonitorFrame.setSizePolicy(sizePolicy5)
-        self.QQMonitorFrame.setMaximumSize(QSize(16777215, 100))
-        self.QQMonitorFrame.setFrameShape(QFrame.StyledPanel)
-        self.QQMonitorFrame.setFrameShadow(QFrame.Raised)
-        self.qq_monitor_start_button = QPushButton(self.QQMonitorFrame)
-        self.qq_monitor_start_button.setObjectName(u"qq_monitor_start_button")
-        self.qq_monitor_start_button.setGeometry(QRect(160, 10, 121, 51))
-        self.qq_monitor_button = QPushButton(self.QQMonitorFrame)
-        self.qq_monitor_button.setObjectName(u"qq_monitor_button")
-        self.qq_monitor_button.setGeometry(QRect(0, 10, 111, 51))
-        sizePolicy6 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.qq_monitor_button.sizePolicy().hasHeightForWidth())
-        self.qq_monitor_button.setSizePolicy(sizePolicy6)
-        font1 = QFont()
-        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font1.setPointSize(12)
-        self.qq_monitor_button.setFont(font1)
-        self.qq_monitor_button.setFlat(True)
-        self.qq_monitor_online_icon = QLabel(self.QQMonitorFrame)
-        self.qq_monitor_online_icon.setObjectName(u"qq_monitor_online_icon")
-        self.qq_monitor_online_icon.setEnabled(True)
-        self.qq_monitor_online_icon.setGeometry(QRect(120, 20, 50, 50))
-        self.qq_monitor_online_icon.setPixmap(QPixmap(u":/icon/images/online.png"))
-        self.qq_monitor_online_icon.setScaledContents(True)
-        self.qq_monitor_offline_icon = QLabel(self.QQMonitorFrame)
-        self.qq_monitor_offline_icon.setObjectName(u"qq_monitor_offline_icon")
-        self.qq_monitor_offline_icon.setEnabled(True)
-        self.qq_monitor_offline_icon.setGeometry(QRect(120, 20, 50, 50))
-        self.qq_monitor_offline_icon.setPixmap(QPixmap(u":/icon/images/offline.png"))
-        self.qq_monitor_offline_icon.setScaledContents(True)
-        self.qq_monitor_quit_button = QPushButton(self.QQMonitorFrame)
-        self.qq_monitor_quit_button.setObjectName(u"qq_monitor_quit_button")
-        self.qq_monitor_quit_button.setGeometry(QRect(160, 10, 121, 51))
-
-        self.functionListLayout.addWidget(self.QQMonitorFrame)
-
-        self.DisableWinFrame = QFrame(self.verticalLayoutWidget)
-        self.DisableWinFrame.setObjectName(u"DisableWinFrame")
         sizePolicy5.setHeightForWidth(self.DisableWinFrame.sizePolicy().hasHeightForWidth())
         self.DisableWinFrame.setSizePolicy(sizePolicy5)
         self.DisableWinFrame.setMaximumSize(QSize(16777215, 100))
@@ -204,8 +163,14 @@ class Ui_MainWindow(object):
         self.disable_win_button = QPushButton(self.DisableWinFrame)
         self.disable_win_button.setObjectName(u"disable_win_button")
         self.disable_win_button.setGeometry(QRect(0, 10, 111, 51))
+        sizePolicy6 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.disable_win_button.sizePolicy().hasHeightForWidth())
         self.disable_win_button.setSizePolicy(sizePolicy6)
+        font1 = QFont()
+        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
+        font1.setPointSize(12)
         self.disable_win_button.setFont(font1)
         self.disable_win_button.setFlat(True)
         self.disable_win_online_icon = QLabel(self.DisableWinFrame)
@@ -225,6 +190,41 @@ class Ui_MainWindow(object):
         self.disable_win_quit_button.setGeometry(QRect(160, 10, 121, 51))
 
         self.functionListLayout.addWidget(self.DisableWinFrame)
+
+        self.QQMonitorFrame = QFrame(self.verticalLayoutWidget)
+        self.QQMonitorFrame.setObjectName(u"QQMonitorFrame")
+        sizePolicy5.setHeightForWidth(self.QQMonitorFrame.sizePolicy().hasHeightForWidth())
+        self.QQMonitorFrame.setSizePolicy(sizePolicy5)
+        self.QQMonitorFrame.setMaximumSize(QSize(16777215, 100))
+        self.QQMonitorFrame.setFrameShape(QFrame.StyledPanel)
+        self.QQMonitorFrame.setFrameShadow(QFrame.Raised)
+        self.qq_monitor_start_button = QPushButton(self.QQMonitorFrame)
+        self.qq_monitor_start_button.setObjectName(u"qq_monitor_start_button")
+        self.qq_monitor_start_button.setGeometry(QRect(160, 10, 121, 51))
+        self.qq_monitor_button = QPushButton(self.QQMonitorFrame)
+        self.qq_monitor_button.setObjectName(u"qq_monitor_button")
+        self.qq_monitor_button.setGeometry(QRect(0, 10, 111, 51))
+        sizePolicy6.setHeightForWidth(self.qq_monitor_button.sizePolicy().hasHeightForWidth())
+        self.qq_monitor_button.setSizePolicy(sizePolicy6)
+        self.qq_monitor_button.setFont(font1)
+        self.qq_monitor_button.setFlat(True)
+        self.qq_monitor_online_icon = QLabel(self.QQMonitorFrame)
+        self.qq_monitor_online_icon.setObjectName(u"qq_monitor_online_icon")
+        self.qq_monitor_online_icon.setEnabled(True)
+        self.qq_monitor_online_icon.setGeometry(QRect(120, 20, 50, 50))
+        self.qq_monitor_online_icon.setPixmap(QPixmap(u":/icon/images/online.png"))
+        self.qq_monitor_online_icon.setScaledContents(True)
+        self.qq_monitor_offline_icon = QLabel(self.QQMonitorFrame)
+        self.qq_monitor_offline_icon.setObjectName(u"qq_monitor_offline_icon")
+        self.qq_monitor_offline_icon.setEnabled(True)
+        self.qq_monitor_offline_icon.setGeometry(QRect(120, 20, 50, 50))
+        self.qq_monitor_offline_icon.setPixmap(QPixmap(u":/icon/images/offline.png"))
+        self.qq_monitor_offline_icon.setScaledContents(True)
+        self.qq_monitor_quit_button = QPushButton(self.QQMonitorFrame)
+        self.qq_monitor_quit_button.setObjectName(u"qq_monitor_quit_button")
+        self.qq_monitor_quit_button.setGeometry(QRect(160, 10, 121, 51))
+
+        self.functionListLayout.addWidget(self.QQMonitorFrame)
 
         self.EveryDayFrame = QFrame(self.verticalLayoutWidget)
         self.EveryDayFrame.setObjectName(u"EveryDayFrame")
@@ -259,9 +259,47 @@ class Ui_MainWindow(object):
 
         self.functionListLayout.addWidget(self.EveryDayFrame)
 
+        self.VoiceRecognizeFrame = QFrame(self.verticalLayoutWidget)
+        self.VoiceRecognizeFrame.setObjectName(u"VoiceRecognizeFrame")
+        sizePolicy5.setHeightForWidth(self.VoiceRecognizeFrame.sizePolicy().hasHeightForWidth())
+        self.VoiceRecognizeFrame.setSizePolicy(sizePolicy5)
+        self.VoiceRecognizeFrame.setMaximumSize(QSize(16777215, 100))
+        self.VoiceRecognizeFrame.setFrameShape(QFrame.StyledPanel)
+        self.VoiceRecognizeFrame.setFrameShadow(QFrame.Raised)
+        self.voice_recognize_start_button = QPushButton(self.VoiceRecognizeFrame)
+        self.voice_recognize_start_button.setObjectName(u"voice_recognize_start_button")
+        self.voice_recognize_start_button.setEnabled(True)
+        self.voice_recognize_start_button.setGeometry(QRect(160, 10, 121, 51))
+        self.voice_recognize_button = QPushButton(self.VoiceRecognizeFrame)
+        self.voice_recognize_button.setObjectName(u"voice_recognize_button")
+        self.voice_recognize_button.setGeometry(QRect(0, 10, 111, 51))
+        sizePolicy6.setHeightForWidth(self.voice_recognize_button.sizePolicy().hasHeightForWidth())
+        self.voice_recognize_button.setSizePolicy(sizePolicy6)
+        self.voice_recognize_button.setFont(font1)
+        self.voice_recognize_button.setFlat(True)
+        self.voice_recognize_online_icon = QLabel(self.VoiceRecognizeFrame)
+        self.voice_recognize_online_icon.setObjectName(u"voice_recognize_online_icon")
+        self.voice_recognize_online_icon.setEnabled(True)
+        self.voice_recognize_online_icon.setGeometry(QRect(120, 20, 50, 50))
+        self.voice_recognize_online_icon.setPixmap(QPixmap(u":/icon/images/online.png"))
+        self.voice_recognize_online_icon.setScaledContents(True)
+        self.voice_recognize_offline_icon = QLabel(self.VoiceRecognizeFrame)
+        self.voice_recognize_offline_icon.setObjectName(u"voice_recognize_offline_icon")
+        self.voice_recognize_offline_icon.setEnabled(True)
+        self.voice_recognize_offline_icon.setGeometry(QRect(120, 20, 50, 50))
+        self.voice_recognize_offline_icon.setPixmap(QPixmap(u":/icon/images/offline.png"))
+        self.voice_recognize_offline_icon.setScaledContents(True)
+        self.voice_recognize_quit_button = QPushButton(self.VoiceRecognizeFrame)
+        self.voice_recognize_quit_button.setObjectName(u"voice_recognize_quit_button")
+        self.voice_recognize_quit_button.setEnabled(True)
+        self.voice_recognize_quit_button.setGeometry(QRect(160, 10, 121, 51))
+
+        self.functionListLayout.addWidget(self.VoiceRecognizeFrame)
+
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.functionListLayout.addItem(self.verticalSpacer_2)
+
 
         self.function_page_layout.addWidget(self.function_list)
 
@@ -295,7 +333,7 @@ class Ui_MainWindow(object):
         self.toolBox.setFont(font2)
         self.disable_win_describe_page = QWidget()
         self.disable_win_describe_page.setObjectName(u"disable_win_describe_page")
-        self.disable_win_describe_page.setGeometry(QRect(0, 0, 311, 369))
+        self.disable_win_describe_page.setGeometry(QRect(0, 0, 100, 30))
         self.disable_win_function_title = QLabel(self.disable_win_describe_page)
         self.disable_win_function_title.setObjectName(u"disable_win_function_title")
         self.disable_win_function_title.setGeometry(QRect(0, 10, 291, 41))
@@ -311,6 +349,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.disable_win_describe_page, u"\u529f\u80fd\u8bf4\u660e")
         self.disable_win_config_page = QWidget()
         self.disable_win_config_page.setObjectName(u"disable_win_config_page")
+        self.disable_win_config_page.setGeometry(QRect(0, 0, 311, 369))
         self.verticalLayoutWidget_3 = QWidget(self.disable_win_config_page)
         self.verticalLayoutWidget_3.setObjectName(u"verticalLayoutWidget_3")
         self.verticalLayoutWidget_3.setGeometry(QRect(10, 10, 291, 351))
@@ -348,7 +387,7 @@ class Ui_MainWindow(object):
         self.toolBox_2.setFont(font2)
         self.qq_monitor_describe_page = QWidget()
         self.qq_monitor_describe_page.setObjectName(u"qq_monitor_describe_page")
-        self.qq_monitor_describe_page.setGeometry(QRect(0, 0, 311, 363))
+        self.qq_monitor_describe_page.setGeometry(QRect(0, 0, 100, 30))
         self.qq_monitor_function_title = QLabel(self.qq_monitor_describe_page)
         self.qq_monitor_function_title.setObjectName(u"qq_monitor_function_title")
         self.qq_monitor_function_title.setGeometry(QRect(0, 10, 301, 41))
@@ -415,7 +454,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.setFont(font2)
         self.every_day_describe_page = QWidget()
         self.every_day_describe_page.setObjectName(u"every_day_describe_page")
-        self.every_day_describe_page.setGeometry(QRect(0, 0, 311, 363))
+        self.every_day_describe_page.setGeometry(QRect(0, 0, 100, 30))
         self.every_day_function_title = QLabel(self.every_day_describe_page)
         self.every_day_function_title.setObjectName(u"every_day_function_title")
         self.every_day_function_title.setGeometry(QRect(0, 10, 301, 41))
@@ -459,6 +498,145 @@ class Ui_MainWindow(object):
 
         self.toolBox_3.addItem(self.every_day_config_page, u"\u57fa\u672c\u914d\u7f6e")
         self.function_widget.addWidget(self.every_day_page)
+        self.voice_recognize_page = QWidget()
+        self.voice_recognize_page.setObjectName(u"voice_recognize_page")
+        self.toolBox_4 = QToolBox(self.voice_recognize_page)
+        self.toolBox_4.setObjectName(u"toolBox_4")
+        self.toolBox_4.setGeometry(QRect(8, 20, 311, 431))
+        sizePolicy7.setHeightForWidth(self.toolBox_4.sizePolicy().hasHeightForWidth())
+        self.toolBox_4.setSizePolicy(sizePolicy7)
+        self.toolBox_4.setFont(font2)
+        self.voice_recognize_describe_page = QWidget()
+        self.voice_recognize_describe_page.setObjectName(u"voice_recognize_describe_page")
+        self.voice_recognize_describe_page.setGeometry(QRect(0, 0, 311, 363))
+        self.voice_recognize_function_title = QLabel(self.voice_recognize_describe_page)
+        self.voice_recognize_function_title.setObjectName(u"voice_recognize_function_title")
+        self.voice_recognize_function_title.setGeometry(QRect(0, 10, 301, 41))
+        self.voice_recognize_function_title.setFont(font3)
+        self.voice_recognize_function_describe = QTextEdit(self.voice_recognize_describe_page)
+        self.voice_recognize_function_describe.setObjectName(u"voice_recognize_function_describe")
+        self.voice_recognize_function_describe.setGeometry(QRect(10, 70, 281, 271))
+        self.voice_recognize_function_describe.setReadOnly(True)
+        self.toolBox_4.addItem(self.voice_recognize_describe_page, u"\u529f\u80fd\u8bf4\u660e")
+        self.voice_recognize_config_page = QWidget()
+        self.voice_recognize_config_page.setObjectName(u"voice_recognize_config_page")
+        self.voice_recognize_config_page.setGeometry(QRect(0, 0, 311, 363))
+        self.verticalLayoutWidget_7 = QWidget(self.voice_recognize_config_page)
+        self.verticalLayoutWidget_7.setObjectName(u"verticalLayoutWidget_7")
+        self.verticalLayoutWidget_7.setGeometry(QRect(10, 10, 291, 351))
+        self.Config_Page_Layout_5 = QVBoxLayout(self.verticalLayoutWidget_7)
+        self.Config_Page_Layout_5.setObjectName(u"Config_Page_Layout_5")
+        self.Config_Page_Layout_5.setSizeConstraint(QLayout.SetMinAndMaxSize)
+        self.Config_Page_Layout_5.setContentsMargins(0, 0, 0, 0)
+        self.voice_recognize_startup_check = QCheckBox(self.verticalLayoutWidget_7)
+        self.voice_recognize_startup_check.setObjectName(u"voice_recognize_startup_check")
+        sizePolicy8.setHeightForWidth(self.voice_recognize_startup_check.sizePolicy().hasHeightForWidth())
+        self.voice_recognize_startup_check.setSizePolicy(sizePolicy8)
+        self.voice_recognize_startup_check.setMinimumSize(QSize(0, 0))
+        self.voice_recognize_startup_check.setMaximumSize(QSize(16777215, 60))
+
+        self.Config_Page_Layout_5.addWidget(self.voice_recognize_startup_check)
+
+        self.device_choose_frame = QFrame(self.verticalLayoutWidget_7)
+        self.device_choose_frame.setObjectName(u"device_choose_frame")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.device_choose_frame.sizePolicy().hasHeightForWidth())
+        self.device_choose_frame.setSizePolicy(sizePolicy10)
+        self.device_choose_frame.setMinimumSize(QSize(289, 60))
+        self.device_choose_frame.setFrameShape(QFrame.StyledPanel)
+        self.device_choose_frame.setFrameShadow(QFrame.Raised)
+        self.device_choose_label = QLabel(self.device_choose_frame)
+        self.device_choose_label.setObjectName(u"device_choose_label")
+        self.device_choose_label.setGeometry(QRect(0, 20, 81, 31))
+        font4 = QFont()
+        font4.setFamilies([u"\u65b0\u5b8b\u4f53"])
+        font4.setPointSize(10)
+        self.device_choose_label.setFont(font4)
+        self.device_choose_combo_box = QComboBox(self.device_choose_frame)
+        self.device_choose_combo_box.setObjectName(u"device_choose_combo_box")
+        self.device_choose_combo_box.setGeometry(QRect(90, 20, 191, 30))
+
+        self.Config_Page_Layout_5.addWidget(self.device_choose_frame)
+
+        self.ak_id = QFrame(self.verticalLayoutWidget_7)
+        self.ak_id.setObjectName(u"ak_id")
+        sizePolicy9.setHeightForWidth(self.ak_id.sizePolicy().hasHeightForWidth())
+        self.ak_id.setSizePolicy(sizePolicy9)
+        self.ak_id.setMinimumSize(QSize(0, 60))
+        self.ak_id.setMaximumSize(QSize(16777215, 60))
+        self.ak_id.setSizeIncrement(QSize(0, 90))
+        self.ak_id.setBaseSize(QSize(0, 90))
+        self.ak_id.setFrameShape(QFrame.StyledPanel)
+        self.ak_id.setFrameShadow(QFrame.Raised)
+        self.ak_id_title = QLabel(self.ak_id)
+        self.ak_id_title.setObjectName(u"ak_id_title")
+        self.ak_id_title.setGeometry(QRect(0, 20, 85, 25))
+        font5 = QFont()
+        font5.setFamilies([u"Microsoft JhengHei UI"])
+        self.ak_id_title.setFont(font5)
+        self.ak_id_title.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ak_id_edit = QLineEdit(self.ak_id)
+        self.ak_id_edit.setObjectName(u"ak_id_edit")
+        self.ak_id_edit.setGeometry(QRect(90, 15, 191, 30))
+        self.ak_id_edit.setEchoMode(QLineEdit.Password)
+        self.ak_id_edit.setClearButtonEnabled(False)
+
+        self.Config_Page_Layout_5.addWidget(self.ak_id)
+
+        self.ak_secret = QFrame(self.verticalLayoutWidget_7)
+        self.ak_secret.setObjectName(u"ak_secret")
+        sizePolicy9.setHeightForWidth(self.ak_secret.sizePolicy().hasHeightForWidth())
+        self.ak_secret.setSizePolicy(sizePolicy9)
+        self.ak_secret.setMinimumSize(QSize(0, 60))
+        self.ak_secret.setMaximumSize(QSize(16777215, 60))
+        self.ak_secret.setSizeIncrement(QSize(0, 90))
+        self.ak_secret.setBaseSize(QSize(0, 90))
+        self.ak_secret.setFrameShape(QFrame.StyledPanel)
+        self.ak_secret.setFrameShadow(QFrame.Raised)
+        self.ak_secret_title = QLabel(self.ak_secret)
+        self.ak_secret_title.setObjectName(u"ak_secret_title")
+        self.ak_secret_title.setGeometry(QRect(0, 20, 85, 25))
+        self.ak_secret_title.setFont(font5)
+        self.ak_secret_title.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.ak_secret_edit = QLineEdit(self.ak_secret)
+        self.ak_secret_edit.setObjectName(u"ak_secret_edit")
+        self.ak_secret_edit.setGeometry(QRect(90, 15, 191, 30))
+        self.ak_secret_edit.setEchoMode(QLineEdit.Password)
+        self.ak_secret_edit.setClearButtonEnabled(False)
+
+        self.Config_Page_Layout_5.addWidget(self.ak_secret)
+
+        self.app_key = QFrame(self.verticalLayoutWidget_7)
+        self.app_key.setObjectName(u"app_key")
+        sizePolicy9.setHeightForWidth(self.app_key.sizePolicy().hasHeightForWidth())
+        self.app_key.setSizePolicy(sizePolicy9)
+        self.app_key.setMinimumSize(QSize(0, 60))
+        self.app_key.setMaximumSize(QSize(16777215, 60))
+        self.app_key.setSizeIncrement(QSize(0, 90))
+        self.app_key.setBaseSize(QSize(0, 90))
+        self.app_key.setFrameShape(QFrame.StyledPanel)
+        self.app_key.setFrameShadow(QFrame.Raised)
+        self.app_key_title = QLabel(self.app_key)
+        self.app_key_title.setObjectName(u"app_key_title")
+        self.app_key_title.setGeometry(QRect(0, 20, 85, 25))
+        self.app_key_title.setFont(font5)
+        self.app_key_title.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.app_key_edit = QLineEdit(self.app_key)
+        self.app_key_edit.setObjectName(u"app_key_edit")
+        self.app_key_edit.setGeometry(QRect(90, 15, 191, 30))
+        self.app_key_edit.setEchoMode(QLineEdit.Password)
+        self.app_key_edit.setClearButtonEnabled(False)
+
+        self.Config_Page_Layout_5.addWidget(self.app_key)
+
+        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.Config_Page_Layout_5.addItem(self.verticalSpacer_6)
+
+        self.toolBox_4.addItem(self.voice_recognize_config_page, u"\u57fa\u672c\u914d\u7f6e")
+        self.function_widget.addWidget(self.voice_recognize_page)
 
         self.function_page_layout.addWidget(self.function_display)
 
@@ -468,10 +646,10 @@ class Ui_MainWindow(object):
         self.LogTextArea = QPlainTextEdit(self.log_page)
         self.LogTextArea.setObjectName(u"LogTextArea")
         self.LogTextArea.setGeometry(QRect(23, 60, 601, 571))
-        font4 = QFont()
-        font4.setFamilies([u"\u5b8b\u4f53"])
-        font4.setPointSize(11)
-        self.LogTextArea.setFont(font4)
+        font6 = QFont()
+        font6.setFamilies([u"\u5b8b\u4f53"])
+        font6.setPointSize(11)
+        self.LogTextArea.setFont(font6)
         self.LogTextArea.setReadOnly(True)
         self.stackedWidget.addWidget(self.log_page)
         self.setting_page = QWidget()
@@ -499,32 +677,29 @@ class Ui_MainWindow(object):
         self.version_label = QLabel(self.Button_Display_Frame)
         self.version_label.setObjectName(u"version_label")
         self.version_label.setGeometry(QRect(710, 0, 61, 31))
-        sizePolicy10 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        sizePolicy10.setHorizontalStretch(0)
-        sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.version_label.sizePolicy().hasHeightForWidth())
-        self.version_label.setSizePolicy(sizePolicy10)
-        font5 = QFont()
-        font5.setFamilies([u"Nirmala UI"])
-        font5.setPointSize(16)
-        self.version_label.setFont(font5)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.version_label.sizePolicy().hasHeightForWidth())
+        self.version_label.setSizePolicy(sizePolicy11)
+        font7 = QFont()
+        font7.setFamilies([u"Nirmala UI"])
+        font7.setPointSize(16)
+        self.version_label.setFont(font7)
         self.version_label.setAlignment(Qt.AlignCenter)
         self.version_update_button = QPushButton(self.Button_Display_Frame)
         self.version_update_button.setObjectName(u"version_update_button")
         self.version_update_button.setGeometry(QRect(580, 0, 111, 31))
-        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.version_update_button.sizePolicy().hasHeightForWidth())
-        self.version_update_button.setSizePolicy(sizePolicy11)
+        sizePolicy10.setHeightForWidth(self.version_update_button.sizePolicy().hasHeightForWidth())
+        self.version_update_button.setSizePolicy(sizePolicy10)
         self.version_update_button.setMinimumSize(QSize(0, 0))
         self.version_update_button.setBaseSize(QSize(0, 203))
         self.check_update_button = QPushButton(self.Button_Display_Frame)
         self.check_update_button.setObjectName(u"check_update_button")
         self.check_update_button.setEnabled(True)
         self.check_update_button.setGeometry(QRect(580, 0, 111, 31))
-        sizePolicy11.setHeightForWidth(self.check_update_button.sizePolicy().hasHeightForWidth())
-        self.check_update_button.setSizePolicy(sizePolicy11)
+        sizePolicy10.setHeightForWidth(self.check_update_button.sizePolicy().hasHeightForWidth())
+        self.check_update_button.setSizePolicy(sizePolicy10)
         self.check_update_button.setMinimumSize(QSize(0, 0))
         self.check_update_button.setBaseSize(QSize(0, 203))
         self.check_update_button.setCheckable(False)
@@ -538,19 +713,22 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.stackedWidget.setCurrentIndex(1)
-        self.qq_monitor_button.setDefault(False)
         self.disable_win_button.setDefault(False)
+        self.qq_monitor_button.setDefault(False)
         self.every_day_button.setDefault(False)
-        self.function_widget.setCurrentIndex(2)
+        self.voice_recognize_button.setDefault(False)
+        self.function_widget.setCurrentIndex(3)
         self.toolBox.setCurrentIndex(1)
         self.toolBox.layout().setSpacing(3)
-        self.toolBox_2.setCurrentIndex(0)
+        self.toolBox_2.setCurrentIndex(1)
         self.toolBox_2.layout().setSpacing(6)
         self.toolBox_3.setCurrentIndex(1)
         self.toolBox_3.layout().setSpacing(6)
+        self.toolBox_4.setCurrentIndex(1)
+        self.toolBox_4.layout().setSpacing(6)
+
 
         QMetaObject.connectSlotsByName(MainWindow)
-
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -561,76 +739,79 @@ class Ui_MainWindow(object):
         self.setting_button.setText(QCoreApplication.translate("MainWindow", u"\u8bbe\u7f6e", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u754c\u97621", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u5217\u8868", None))
-        self.qq_monitor_start_button.setText(QCoreApplication.translate("MainWindow", u"START", None))
-        self.qq_monitor_button.setText(QCoreApplication.translate("MainWindow", u"\u7981\u7528Win", None))
-        self.qq_monitor_online_icon.setText("")
-        self.qq_monitor_offline_icon.setText("")
-        self.qq_monitor_quit_button.setText(QCoreApplication.translate("MainWindow", u"QUIT", None))
         self.disable_win_start_button.setText(QCoreApplication.translate("MainWindow", u"START", None))
-        self.disable_win_button.setText(QCoreApplication.translate("MainWindow", u"QQ\u76d1\u542c", None))
+        self.disable_win_button.setText(QCoreApplication.translate("MainWindow", u"\u7981\u7528Win", None))
         self.disable_win_online_icon.setText("")
         self.disable_win_offline_icon.setText("")
         self.disable_win_quit_button.setText(QCoreApplication.translate("MainWindow", u"QUIT", None))
+        self.qq_monitor_start_button.setText(QCoreApplication.translate("MainWindow", u"START", None))
+        self.qq_monitor_button.setText(QCoreApplication.translate("MainWindow", u"QQ\u76d1\u542c", None))
+        self.qq_monitor_online_icon.setText("")
+        self.qq_monitor_offline_icon.setText("")
+        self.qq_monitor_quit_button.setText(QCoreApplication.translate("MainWindow", u"QUIT", None))
         self.every_day_status_button.setText(QCoreApplication.translate("MainWindow", u"\u5df2\u5b8c\u6210", None))
         self.every_day_button.setText(QCoreApplication.translate("MainWindow", u"\u6bcf\u65e5\u68c0\u67e5", None))
         self.every_day_online_icon.setText("")
         self.every_day_offline_icon.setText("")
-        self.disable_win_function_title.setText(
-            QCoreApplication.translate("MainWindow", u"\u7981\u7528Win\u529f\u80fd\u8bf4\u660e", None))
-        self.disable_win_function_describe.setHtml(QCoreApplication.translate("MainWindow",
-                                                                              u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                                              "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                                              "p, li { white-space: pre-wrap; }\n"
-                                                                              "</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                                              "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u5728\u6e38\u620f\u8fc7\u7a0b\u4e2d\u7981\u7528Win\u952e\uff0c\u5e76\u4e14\u963b\u6b62\u8fde\u7eed\u4e24\u4e0b\u7684ctrl\u952e</p></body></html>",
-                                                                              None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.disable_win_describe_page),
-                                 QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
-        self.disable_win_startup_check.setText(
-            QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.disable_win_config_page),
-                                 QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
-        self.qq_monitor_function_title.setText(
-            QCoreApplication.translate("MainWindow", u"QQ\u76d1\u542c\u8bf4\u660e", None))
-        self.qq_monitor_function_describe.setHtml(QCoreApplication.translate("MainWindow",
-                                                                             u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                                             "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                                             "p, li { white-space: pre-wrap; }\n"
-                                                                             "</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                                             "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u5141\u8bb8\u76d1\u542cQQ\u4fe1\u606f\u5e76\u81ea\u52a8\u56de\u590d</p></body></html>",
-                                                                             None))
-        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.qq_monitor_describe_page),
-                                   QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
-        self.qq_monitor_startup_check.setText(
-            QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
-        self.qq_monitor_address_title.setText(
-            QCoreApplication.translate("MainWindow", u"\u76d1\u542c\u5730\u5740\uff1a", None))
+        self.voice_recognize_start_button.setText(QCoreApplication.translate("MainWindow", u"START", None))
+        self.voice_recognize_button.setText(QCoreApplication.translate("MainWindow", u"\u8bed\u97f3\u8bc6\u522b", None))
+        self.voice_recognize_online_icon.setText("")
+        self.voice_recognize_offline_icon.setText("")
+        self.voice_recognize_quit_button.setText(QCoreApplication.translate("MainWindow", u"QUIT", None))
+        self.disable_win_function_title.setText(QCoreApplication.translate("MainWindow", u"\u7981\u7528Win\u529f\u80fd\u8bf4\u660e", None))
+        self.disable_win_function_describe.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u5728\u6e38\u620f\u8fc7\u7a0b\u4e2d\u7981\u7528Win\u952e\uff0c\u5e76\u4e14\u963b\u6b62\u8fde\u7eed\u4e24\u4e0b\u7684ctrl\u952e</p></body></html>", None))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.disable_win_describe_page), QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
+        self.disable_win_startup_check.setText(QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.disable_win_config_page), QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
+        self.qq_monitor_function_title.setText(QCoreApplication.translate("MainWindow", u"QQ\u76d1\u542c\u8bf4\u660e", None))
+        self.qq_monitor_function_describe.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u5141\u8bb8\u76d1\u542cQQ\u4fe1\u606f\u5e76\u81ea\u52a8\u56de\u590d</p></body></html>", None))
+        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.qq_monitor_describe_page), QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
+        self.qq_monitor_startup_check.setText(QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
+        self.qq_monitor_address_title.setText(QCoreApplication.translate("MainWindow", u"\u76d1\u542c\u5730\u5740\uff1a", None))
         self.qq_monitor_address_edit.setText("")
-        self.qq_monitor_address_edit.setPlaceholderText(
-            QCoreApplication.translate("MainWindow", u"ws://localhost:6700/api", None))
-        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.qq_monitor_config_page),
-                                   QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
-        self.every_day_function_title.setText(
-            QCoreApplication.translate("MainWindow", u"\u6bcf\u65e5\u68c0\u67e5\u8bf4\u660e", None))
-        self.every_day_function_describe.setHtml(QCoreApplication.translate("MainWindow",
-                                                                            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                                            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-                                                                            "p, li { white-space: pre-wrap; }\n"
-                                                                            "</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-                                                                            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u6bcf\u65e5\u7b2c\u4e00\u6b21\u8fd0\u884c\u65f6\uff0c\u8fdb\u884c\u6bcf\u65e5\u68c0\u67e5</p></body></html>",
-                                                                            None))
-        self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.every_day_describe_page),
-                                   QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
-        self.every_day_startup_check.setText(
-            QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
-        self.blog_online_startup_check.setText(
-            QCoreApplication.translate("MainWindow", u"\u8fdb\u884c\u535a\u5ba2\u5728\u7ebf\u68c0\u67e5", None))
-        self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.every_day_config_page),
-                                   QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
+        self.qq_monitor_address_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"ws://localhost:6700/api", None))
+        self.toolBox_2.setItemText(self.toolBox_2.indexOf(self.qq_monitor_config_page), QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
+        self.every_day_function_title.setText(QCoreApplication.translate("MainWindow", u"\u6bcf\u65e5\u68c0\u67e5\u8bf4\u660e", None))
+        self.every_day_function_describe.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u6bcf\u65e5\u7b2c\u4e00\u6b21\u8fd0\u884c\u65f6\uff0c\u8fdb\u884c\u6bcf\u65e5\u68c0\u67e5</p></body></html>", None))
+        self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.every_day_describe_page), QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
+        self.every_day_startup_check.setText(QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
+        self.blog_online_startup_check.setText(QCoreApplication.translate("MainWindow", u"\u8fdb\u884c\u535a\u5ba2\u5728\u7ebf\u68c0\u67e5", None))
+        self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.every_day_config_page), QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
+        self.voice_recognize_function_title.setText(QCoreApplication.translate("MainWindow", u"\u8bed\u97f3\u8bc6\u522b\u8bf4\u660e", None))
+        self.voice_recognize_function_describe.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Agency FB'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\u957f\u6309CapsLock\u952e\uff0c\u81ea\u52a8\u76d1\u542c\u540d\u4e3a<span style=\" font-family:'\u5b8b\u4f53,monospace'; font-size:9.8pt; color:#6a8759;\">\u8f93\u5165\u9ea6\u514b\u98ce</span>\u7684\u8f93\u5165\u8bbe\u5907\uff0c\u4f7f\u7528\u963f\u91cc\u4e91API\u8fdb\u884c\u8bc6\u522b\u8f6c\u5199\uff0c\u5c06\u7ed3\u679c\u4f5c\u4e3a\u952e\u76d8\u8f93\u5165\u5230\u5f53\u524d\u5bf9\u8bdd\u6846\u4e2d</p></body></html>", None))
+        self.toolBox_4.setItemText(self.toolBox_4.indexOf(self.voice_recognize_describe_page), QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u8bf4\u660e", None))
+        self.voice_recognize_startup_check.setText(QCoreApplication.translate("MainWindow", u"\u9ed8\u8ba4\u542f\u52a8", None))
+        self.device_choose_label.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9\u8f93\u5165\u8bbe\u5907", None))
+        self.ak_id_title.setText(QCoreApplication.translate("MainWindow", u"AKID:", None))
+        self.ak_id_edit.setText("")
+        self.ak_id_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"LTAI5t7aZE48hexQix7SgiHm", None))
+        self.ak_secret_title.setText(QCoreApplication.translate("MainWindow", u"AKSECRET:", None))
+        self.ak_secret_edit.setText("")
+        self.ak_secret_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"w1BEw7iMmGomVtXyVp9xMUedMd7OTJ", None))
+        self.app_key_title.setText(QCoreApplication.translate("MainWindow", u"APPKEY:", None))
+        self.app_key_edit.setText("")
+        self.app_key_edit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"V330NkiwzK1Jk4Xh", None))
+        self.toolBox_4.setItemText(self.toolBox_4.indexOf(self.voice_recognize_config_page), QCoreApplication.translate("MainWindow", u"\u57fa\u672c\u914d\u7f6e", None))
         self.LogTextArea.setPlainText("")
-        self.auto_start_checkbox.setText(
-            QCoreApplication.translate("MainWindow", u"\u662f\u5426\u5f00\u673a\u81ea\u542f", None))
+        self.auto_start_checkbox.setText(QCoreApplication.translate("MainWindow", u"\u662f\u5426\u5f00\u673a\u81ea\u542f", None))
         self.version_label.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
         self.version_update_button.setText(QCoreApplication.translate("MainWindow", u"\u68c0\u67e5\u5347\u7ea7", None))
         self.check_update_button.setText(QCoreApplication.translate("MainWindow", u"\u68c0\u67e5\u5347\u7ea7", None))
     # retranslateUi
+

@@ -1,4 +1,5 @@
 import logging
+import struct
 import sys
 
 import plyvel
@@ -52,8 +53,16 @@ class DbHelper:
         return True
 
     def __get_score(self, key):
+
+        # score = self.db.get(key.encode())
+        # return int.from_bytes(score, byteorder='big') if score else 0
+        # int to float
         score = self.db.get(key.encode())
-        return int.from_bytes(score, byteorder='big') if score else 0
+        if score:
+            score = struct.unpack('f', score)[0]
+        else:
+            score = 0
+        return round(score, 1)
 
     def __get_score_reasons(self, key):
         reasons = self.db.get(key.encode())
@@ -62,8 +71,14 @@ class DbHelper:
     def __update_score(self, key_score, key_reasons, add_score, reason):
         # 更新分数
         score = self.db.get(key_score.encode())
-        result_score = (int.from_bytes(score, byteorder='big') if score else 0) + add_score
-        self.db.put(key_score.encode(), result_score.to_bytes(1, byteorder='big'))
+        if score:
+            score = struct.unpack('f', score)[0]
+        else:
+            score = 0
+        result_score = score + add_score
+        result_score = bytearray(struct.pack("f", result_score))
+
+        self.db.put(key_score.encode(), result_score)
         # 更新原因
         reason += '\n'
         pre_reasons = self.db.get(key_reasons.encode())

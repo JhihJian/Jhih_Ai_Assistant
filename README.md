@@ -4,6 +4,10 @@ TODO
 
 1. 升级用线程 无法直接退出，用立即重启对话框
 2. 计时提醒
+3. 任务栏图标，最小化托盘图标
+4. 功能启动中，按钮提示并设置disable
+5. guyu qq 输入数字使用功能
+6. 分数共同保存
 
 -----------------------------------
 pynput 以async模式使用
@@ -32,12 +36,6 @@ if __name__ == '__main__':
     import old_main_module
     old_main_module.main()
 ```
-
-TODO
-
-- Function 启动、退出按钮假如中间状态，不可点击
-- 界面显示版本号
-- version.ini中配置版本号
 
 ----------------------
 Git push 报错

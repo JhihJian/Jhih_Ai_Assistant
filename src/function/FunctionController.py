@@ -23,8 +23,21 @@ class FunctionController(Thread):
         if function_hook not in self.tasks_dict:
             return False
         task = self.tasks_dict[function_hook]
+        print(task)
         task.cancel()
-        self.logger.info(f"remove async task {function_hook.__name__} current tasks size {len(self.tasks_dict)}")
+        self.logger.info(
+            f"remove async task {function_hook.__qualname__} current tasks size {len(self.tasks_dict)}")
+        # 为什么这里不要调用 run_until_complete 再退出呢？
+        return True
+
+    def __stop_sync_task(self, function_hook):
+        if function_hook not in self.tasks_dict:
+            return False
+        task = self.tasks_dict[function_hook]
+        print(task)
+        task.cancel()
+        self.logger.info(
+            f"remove async task {function_hook.__qualname__} current tasks size {len(self.tasks_dict)}")
         # 为什么这里不要调用 run_until_complete 再退出呢？
         return True
 

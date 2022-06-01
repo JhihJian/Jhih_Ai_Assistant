@@ -1,3 +1,6 @@
+# 编译
+pyside6-uic --from-imports asserts/MainWindows.ui -o src/gui/Ui_MainWindows.py
+
 pyinstaller .\__init__.spec
 
 
@@ -5,7 +8,7 @@ pyinstaller .\__init__.spec
 
 1. 修改 RELEASE.md
 2. AppSetting.py
-3. 创建Tag `git tag v1.0.0` 并提交 `git push origin --tags`
+3. 创建Tag `git tag v1.1.0` 并提交 `git push origin --tags`
 
 注：
 

@@ -5,24 +5,29 @@ import keyboard
 import nls
 
 URL = "wss://nls-gateway.cn-shanghai.aliyuncs.com/ws/v1"
-AKID = ""
-AKKEY = ""
-APPKEY = ""
 
 
+# 调用阿里云进行语音识别
 class AliRecognizer:
     SEND_INTERVAL = 0.1  # 秒
     already_send = 0
-    isReady = False
-    recognizer_callalbe = None  # 识别结果的回调函数
+    # 识别程序准备是否完成
+    isRecognizerReady = False
+    recognizer_callable = None  # 识别结果的回调函数
 
-    def __init__(self, get_record_frames, is_finish, recognizer_callalbe=None):
+    # is_begin 说明录音开始
+    # is_finish 说明录音结束
+    # get_record_frames 实时获得录音帧，只要未结束不断调用
+    # recognizer_callable 提交录音识别结果的回调
+    def __init__(self, ak_id, ak_secret, app_key, get_record_frames, is_finish, is_begin=None,
+                 recognizer_callable=None):
+        self.is_nls_start = False
         self.__id = '__id'
         self.sr = nls.NlsSpeechRecognizer(
             url=URL,
-            akid=AKID,
-            aksecret=AKKEY,
-            appkey=APPKEY,
+            akid=ak_id,
+            aksecret=ak_secret,
+            appkey=app_key,
             on_start=self.test_on_start,
             on_result_changed=self.test_on_result_chg,
             on_completed=self.test_on_completed,
@@ -34,17 +39,21 @@ class AliRecognizer:
             raise Exception()
         self.get_record_frames = get_record_frames
         self.is_finish = is_finish
-        self.recognizer_callalbe = recognizer_callalbe
+        self.is_begin = is_begin
+        self.recognizer_callable = recognizer_callable
 
     def __continue_send(self):
-        while not self.isReady:
+        while not self.isRecognizerReady:
             time.sleep(0.01)
         frames = self.get_record_frames()
-        print("send frames size:{}".format(len(frames)))
-        while not self.is_finish() or len(frames) > self.already_send:
+        while len(frames) == 0:
+            time.sleep(0.01)
+            frames = self.get_record_frames()
+        # print("send frames size:{}".format(len(frames)))
+        while (not self.is_finish()) or len(frames) > self.already_send:
             ready_to_send_frames = frames[self.already_send:]
-            print("self.already_send:" + str(self.already_send) + " ready_to_send_frames size:" + str(
-                len(ready_to_send_frames)))
+            # print("self.already_send:" + str(self.already_send) + " ready_to_send_frames size:" + str(
+            #     len(ready_to_send_frames)))
 
             for frame in ready_to_send_frames:
                 self.send(frame)
@@ -52,22 +61,29 @@ class AliRecognizer:
                 time.sleep(self.SEND_INTERVAL)
             frames = self.get_record_frames()
         # print("__continue_send finish")
-        self.finish()
+        # self.finish()
+        self.sr.stop()
 
     def run(self):
-        self.r = self.sr.start(aformat="pcm", ex={"hello": 123})
+        self.is_nls_start = self.sr.start(aformat="pcm", ex={"hello": 123})
         self.already_send = 0
-        threading.Thread(target=self.__continue_send).start()
+        self.__continue_send()
 
     def send(self, data):
         # print("send data")
         self.sr.send_audio(bytes(data))
 
     def finish(self):
-        self.r = self.sr.stop()
+        if self.sr:
+            if self.is_nls_start:
+                self.sr.stop()
+            if self.isRecognizerReady:
+                self.sr.shutdown()
+            del self.sr
+            self.sr = None
         # print("{}: sr stopped:{}".format(self.__id, r))
         print("识别结束")
-        self.isReady = False
+        self.isRecognizerReady = False
 
     # def sendAll(self, data):
     #     r = self.sr.start(aformat="pcm", ex={"hello": 123})
@@ -83,7 +99,7 @@ class AliRecognizer:
     def test_on_start(self, message, *args):
         print("test_on_start:{}".format(message))
         # print("on_start")
-        self.isReady = True
+        self.isRecognizerReady = True
 
     def test_on_error(self, message, *args):
         print("on_error args=>{}".format(message))
@@ -100,16 +116,16 @@ class AliRecognizer:
         print("on_completed:args=>{} message=>{}".format(args, message))
         self.resultText = json.loads(message)["payload"]["result"]
         print(self.resultText)
-        self.recognizer_callalbe(self.resultText)
+        self.recognizer_callable(self.resultText)
 
-
-if __name__ == '__main__':
-    # 设置打开日志输出
-    nls.enableTrace(True)
-    filename = 'K:/3-WorkSpace/2-Python-Projects/Jhih_Ai_Assistant/src/recordedFile.wav'
-    with open(filename, "rb") as f:
-        data = f.read()
-    frames = list(zip(*(iter(data),) * 640))
-    aliRecognizer = AliRecognizer(get_record_frames=(lambda: frames), is_finish=(lambda: True))
-    aliRecognizer.run()
-    keyboard.wait()
+#
+# if __name__ == '__main__':
+#     # 设置打开日志输出
+#     nls.enableTrace(True)
+#     filename = '/recordedFile.wav'
+#     with open(filename, "rb") as f:
+#         data = f.read()
+#     frames = list(zip(*(iter(data),) * 640))
+#     aliRecognizer = AliRecognizer(get_record_frames=(lambda: frames), is_finish=(lambda: True))
+#     aliRecognizer.run()
+#     keyboard.wait()

@@ -272,7 +272,8 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         self.device_choose_combo_box.currentTextChanged.connect(input_devices_changed)
 
-        self.voice_recognizer_function = VoiceRecognizerFunction(self.function_controller, self.db)
+        self.voice_recognizer_function = VoiceRecognizerFunction(self.function_controller, self.db,
+                                                                 self.qq_monitor_function)
 
         self.voice_recognize_start_button.clicked.connect(self.voice_recognizer_function.start)
         self.voice_recognize_quit_button.clicked.connect(self.voice_recognizer_function.quit)

@@ -29,3 +29,4 @@ if __name__ == '__main__':
     app_name = QApplication.applicationName()
     ret = app.exec()
     sys.exit(ret)
+hi谷雨五分钟之后提醒我跟小仔说一声

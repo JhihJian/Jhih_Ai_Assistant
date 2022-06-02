@@ -1,6 +1,7 @@
 import keyboard
 
 from function.BaseFunction import BaseFunction, FunctionStatus
+from function.TimeReminderFunction import TimeReminderFunction
 from util.AliRecognizer import AliRecognizer
 from util.CapsLockMonitor import CapsLockMonitor
 from util.RecoderVoice import RecordVoice, recoder_get_input_devices_name
@@ -16,12 +17,14 @@ def get_input_devices_name():
 
 
 class VoiceRecognizerFunction(BaseFunction):
-    def __init__(self, function_controller, db):
+    def __init__(self, function_controller, db, monitor_qq_function):
         super().__init__(function_controller)
         self.aliRecognizer = None
         self.monitor_task = None
         self.recordVoice = None
         self.db = db
+        # 如果monitor_qq_function重启怎么办
+        self.time_reminder_function = TimeReminderFunction(function_controller, monitor_qq_function)
 
     def __begin_reg(self):
         # self.aliRecognizer.run()
@@ -44,10 +47,16 @@ class VoiceRecognizerFunction(BaseFunction):
 
         self.logger.info("语音识别功能:启动中...")
 
+        def handleRecognizerResult(result):
+            if self.time_reminder_function.mainEntry(result):
+                return
+            else:
+                keyboard.write(result)
+
         self.aliRecognizer = AliRecognizer(ak_id=ak_id, ak_secret=ak_secret, app_key=app_key,
                                            get_record_frames=self.recordVoice.get_record_frames,
                                            is_finish=self.recordVoice.is_recoder_finish,
-                                           recognizer_callable=lambda s: keyboard.write(s))
+                                           recognizer_callable=handleRecognizerResult)
 
         self.function_status = FunctionStatus.STARTING
 
